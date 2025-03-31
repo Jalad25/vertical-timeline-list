@@ -1,0 +1,10 @@
+{
+	"id": "vertical-timeline-list",
+	"name": "Vertical Timeline List",
+	"version": "1.0.0",
+	"minAppVersion": "1.8.9",
+	"description": "Utilizes lists to create a timeline... or something resembling a timeline.",
+	"author": "Jalad",
+	"authorUrl": "https://linktr.ee/jalad25",
+	"isDesktopOnly": false
+}

@@ -1,0 +1,211 @@
+/* #region Plugin */
+
+body {
+  /* Timeline Line Styling */
+  --timeline-line-width: 3px;
+  --timeline-line-padding: 12px;
+  --timeline-line-style: solid;
+  --timeline-line-margin-inline-start: 0px;
+
+  /* Timeline Dot Styling */
+  --timeline-dot-separation: 10px;
+  --timeline-dot-right-padding: 20px;
+  --timeline-dot-size: 18px;
+
+  /* Timeline Dot Children Styling */
+  --timeline-dotChildren-padding: 10px;
+  --timeline-dotChildren-left-add-padding: 25px;
+  --timeline-dotChildren-top-margin: 10px;
+  --timeline-dotChildren-bottom-margin: 10px;
+}
+
+.theme-light .el-ul ul li[data-task="t"] {
+  /* Timeline Bullets & Line */
+  > ul > li {
+    border-left-color: var(--timeline-line-color-light);
+
+    > span.list-bullet {  
+      &:has(+ span.list-collapse-indicator) {
+        &:after {
+          background-color: var(--timeline-dot-collapsible-color-light);
+          box-shadow: 0 0 0 4px var(--timeline-dot-collapsible-shadow-color-light);
+        }
+      }
+
+      &:has(+ span.list-collapse-indicator:hover) {
+        &:after {
+          box-shadow: 0 0 0 4px var(--timeline-dot-collapsible-shadow-color-light);
+        }
+      }
+
+      &:after {
+        background-color: var(--timeline-dot-color-light);
+        color: var(--timeline-dot-color-light);
+      }
+    }
+
+    > ul > li {
+      background-color: var(--timeline-dotChildren-background-color-light);
+    }
+  }
+}
+
+.theme-dark .el-ul ul li[data-task="t"] {
+  /* Timeline Bullets & Line */
+  > ul > li {
+    border-left-color: var(--timeline-line-color-dark);
+
+    > span.list-bullet {  
+      &:has(+ span.list-collapse-indicator) {
+        &:after {
+          background-color: var(--timeline-dot-collapsible-color-dark);
+        }
+      }
+
+      &:has(+ span.list-collapse-indicator:hover) {
+        &:after {
+          box-shadow: 0 0 0 4px var(--timeline-dot-collapsible-shadow-color-dark);
+        }
+      }
+
+      &:after {
+        background-color: var(--timeline-dot-color-dark);
+        color: var(--timeline-dot-color-dark);
+      }
+    }
+
+    > ul > li {
+      background-color: var(--timeline-dotChildren-background-color-dark);
+    }
+  }
+}
+
+/* Hides indentation guide only on timeline */
+.show-indentation-guide .el-ul ul li[data-task="t"] ul::before {
+  border-inline-end: none !important;
+}
+
+/* Timeline */
+.el-ul ul li[data-task="t"] {
+  margin-inline-start: var(--timeline-line-margin-inline-start);
+
+  /* Hide Timeline Parent Task */
+  > input[type="checkbox"],
+  > p input[type="checkbox"],
+  > span.list-collapse-indicator {
+    display: none !important;
+  }
+
+  /* Timeline Bullets & Line */
+  > ul > li {
+    border-left-width: var(--timeline-line-width);
+    border-left-style: var(--timeline-line-style);
+    padding-inline: var(--timeline-line-padding);   
+    margin-inline-start: var(--timeline-line-margin-inline-start);
+
+    &:not(:last-child) {
+      padding-bottom: var(--timeline-dot-separation);
+    }
+
+    > span.list-bullet {
+      padding-right: var(--timeline-dot-right-padding);
+
+      &:after {
+        width: var(--timeline-dot-size);
+        height: var(--timeline-dot-size);
+      }
+    }
+
+    > span.list-collapse-indicator {
+      /* 
+        The display none is to disable folding of the timeline bullets in reading view. 
+        COLLAPSING IN EDIT VIEW WILL HIDE BLOCK IN READING VIEW! (So don't do that...)
+        REMOVE LINE IF YOU WANT TO BE ABLE TO FOLD THE TIMELINE BULLETS IN READING VIEW 
+        BUT BE WARNED: If you like using Dataview to query tasks
+        clicking on a task from the query to navigate to a task in the timeline
+        while any of the timeline bullets are collapsed
+        will cause it to not properly highlight the specific task! 
+        It only works if ALL TIMELINE BULLETS are expanded!!! For some odd reason...
+        This is only an issue for Dataview. Internal linking still works as expected.
+      */
+      display: var(--timeline-dot-collapsible-display);  /* Allow Collapsing */
+      cursor: var(--timeline-dot-collapsible-cursor); /* Allow Collapsing */
+
+      svg {
+        color: transparent !important;
+      }
+    }
+
+    > ul > li {
+      border-radius: 10px;
+      margin-inline-start: var(--timeline-line-margin-inline-start);
+      padding: var(--timeline-dotChildren-padding) var(--timeline-dotChildren-padding) var(--timeline-dotChildren-padding) calc(var(--timeline-dotChildren-left-add-padding) + var(--timeline-dotChildren-padding));
+      margin-top: var(--timeline-dotChildren-top-margin);
+
+      &:not(:last-child) {
+        margin-bottom: var(--timeline-dotChildren-bottom-margin);
+      }
+    }
+  }
+}
+
+/* #endregion */
+
+/* #region Settings */
+
+.setting-section {
+  font-size: larger;
+  font-weight: bolder;
+  width: 100%;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+.setting-color-table-header {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  text-align: start;
+
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+  margin-top: 10px;
+
+  font-size: medium;
+  font-weight: normal;
+}
+
+.setting-color-table-header-theme-columns {
+  display: flex;
+  width: 100%;
+  flex-direction: row-reverse;
+  text-align: end;
+}
+
+.setting-color-table-header-dark-theme-column {
+  margin-right: 24px;
+	flex: 0.1;
+}
+
+.setting-color-table-header-light-theme-column {
+  margin-right: 12px;
+}
+
+.color-picker-group input {
+  margin-right: 25px;
+}
+
+.setting-section-header {
+  margin-left: 15px;
+  font-style:italic;
+  border-bottom: 1px solid var(--background-modifier-border) !important;
+}
+
+.setting-section-child {
+  border-top: none;
+
+  .setting-item-info {
+    margin-left: 25px;
+  }
+}
+
+/* #endregion */
