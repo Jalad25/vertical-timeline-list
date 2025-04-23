@@ -110,7 +110,7 @@ export class VerticalTimelineListPluginSettings {
   dotChildren: SectionSetting;
 
   constructor() {
-    this.dot = new SectionSetting("Date Dot", null, [
+    this.dot = new SectionSetting("Date dot", null, [
       new ColorCSSSetting("Color", "Dates without descriptions", [
         {
           property: "color-light",
@@ -121,7 +121,7 @@ export class VerticalTimelineListPluginSettings {
           value: "#888888"
         }
       ], ColorSpace.Hex),
-      new ColorCSSSetting("Collapsible Color", "Dates with descriptions", [
+      new ColorCSSSetting("Collapsible color", "Dates with descriptions", [
         {
           property: "collapsible-color-light",
           value: "#8A5CF5"
@@ -131,7 +131,7 @@ export class VerticalTimelineListPluginSettings {
           value: "#8A5CF5"
         }
       ], ColorSpace.Hex),
-      new ColorCSSSetting("Collapsible Hover Color", "Only visible when collapsible option is on", [
+      new ColorCSSSetting("Collapsible hover color", "Only visible when collapsible option is on", [
         {
           property: "collapsible-shadow-color-light",
           value: "#8a5cf5"
@@ -162,7 +162,7 @@ export class VerticalTimelineListPluginSettings {
         }
       ])
     ]);
-    this.line = new SectionSetting("Time Line", null, [
+    this.line = new SectionSetting("Time line", null, [
       new ColorCSSSetting("Color", null, [
         {
           property: "color-light",
@@ -174,8 +174,8 @@ export class VerticalTimelineListPluginSettings {
         }
       ], ColorSpace.Hex)
     ], []);
-    this.dotChildren = new SectionSetting("Date Description", null, [
-      new ColorCSSSetting("Background Color", null, [
+    this.dotChildren = new SectionSetting("Date description", null, [
+      new ColorCSSSetting("Background color", null, [
         {
           property: "background-color-light",
           value: "#8f8f8f67"
@@ -297,7 +297,7 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
         )
         break;
       case SettingsSection.cssToggles:
-        this.addSettingSection(containerEl, "Options");
+        this.addSettingSection(containerEl, "Behavior");
         Object.keys(this.plugin.settings).forEach(
           (settingKey: keyof VerticalTimelineListPluginSettings) => {
             let setting = this.plugin.settings[settingKey] as SectionSetting;
