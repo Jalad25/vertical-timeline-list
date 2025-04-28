@@ -1,6 +1,6 @@
 # Vertical Timeline List Plugin
 
-An [Obsidian](https://obsidian.md/) plugin that utilizes lists to create a timeline... or something like a timeline.
+An [Obsidian](https://obsidian.md/) plugin that utilizes task lists to create a timeline... or something like a timeline.
 
 ![preview](screenshots/Preview.gif)
 

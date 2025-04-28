@@ -6,6 +6,7 @@ import { returnColorSpaceValueFromHex, currentColorScheme } from 'src/utilities'
 type ConfigurationDetails = {
   name: string | undefined;
   description: string | undefined;
+  image: string | undefined;
 }
 
 //#endregion
@@ -54,6 +55,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot color",
         description: "Dates without descriptions",
+        image: "Dot.png",
         0: {
           property: "color",
           value: "#888888",
@@ -68,6 +70,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot collapsible color",
         description: "Dates with descriptions",
+        image: "CollapsibleDot.png",
         0: {
           property: "collapsible-color",
           value: "#8A5CF5",
@@ -82,6 +85,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot collapsible hover color",
         description: "Only visible when collapsible option is on",
+        image: "CollapsibleDot.png",
         0: {
           property: "collapsible-shadow-color",
           value: "#8A5CF5",
@@ -98,6 +102,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Line color",
         description: "",
+        image: "Line.png",
         0: {
           property: "color",
           value: "#ffffff",
@@ -114,6 +119,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Date description background color",
         description: "",
+        image: "DotDescription.png",
         0: {
           property: "background-color",
           value: "#00000067",
@@ -132,6 +138,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot collapsible",
         description: "Dates with descriptions can be collapsed",
+        image: "CollapsingDot.gif",
         enabled: false,
         true: {
           "collapsible": [

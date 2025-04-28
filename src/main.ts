@@ -5,7 +5,7 @@ import { VerticalTimelineListPluginSettingsTab } from 'src/settings'
 export default class VerticalTimelineListPlugin extends Plugin {
   configuration: VerticalTimelineListPluginConfiguration;
   PLUGIN_PREFIX = "timeline";
-
+  PLUGIN_ROOT = ".obsidian/plugins/vertical-timeline-list"
 
 	async onload() {
 		await this.loadSettings(new VerticalTimelineListPluginConfiguration(this.PLUGIN_PREFIX));
@@ -17,7 +17,7 @@ export default class VerticalTimelineListPlugin extends Plugin {
 		this.addSettingTab(new VerticalTimelineListPluginSettingsTab(this.app, this));
 	}
 
-  unload() {
+  onunload() {
     this.colorSchemeChange(false);
   }
 
@@ -29,7 +29,7 @@ export default class VerticalTimelineListPlugin extends Plugin {
 		await this.saveData(this.configuration);
 	}
 
-  async colorSchemeChange(toggle: boolean) {
+  private async colorSchemeChange(toggle: boolean) {
     if (toggle) {
       this.registerEvent(
         this.app.workspace.on("css-change", async () => {
