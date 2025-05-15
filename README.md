@@ -6,15 +6,15 @@ An [Obsidian](https://obsidian.md/) plugin that utilizes task lists to create a 
 
 ## Usage
 
-Timelines are denoted using a task list with a 't' within the brackets. The dates of the timeline are then added as nested lists as well as their descriptions.
+Timelines are denoted using a task list with a 't' within the brackets. The dates of the timeline are then added as nested lists as well as their details.
 
 For example, the following 
 ```
 # Example
 - [t]
   - 2020
-    - Description for 2020
-    - Additional description for 2020
+    - Detail for 2020
+    - Additional detail for 2020
   - 2021
   - 2022
 ```

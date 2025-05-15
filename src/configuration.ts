@@ -54,7 +54,7 @@ export class VerticalTimelineListPluginConfiguration {
     this.timelineThemesCSSColors["dot"] = [
       {
         name: "Dot color",
-        description: "Dates without descriptions",
+        description: "Dots without details",
         image: "Dot.png",
         0: {
           property: "color",
@@ -69,7 +69,7 @@ export class VerticalTimelineListPluginConfiguration {
       } as ThemesCSSColorProperty & ConfigurationDetails,
       {
         name: "Dot collapsible color",
-        description: "Dates with descriptions",
+        description: "Dots with details",
         image: "CollapsibleDot.png",
         0: {
           property: "collapsible-color",
@@ -117,7 +117,7 @@ export class VerticalTimelineListPluginConfiguration {
     ];
     this.timelineThemesCSSColors["dotChildren"] = [
       {
-        name: "Date description background color",
+        name: "Dot details background color",
         description: "",
         image: "DotDescription.png",
         0: {
@@ -137,7 +137,7 @@ export class VerticalTimelineListPluginConfiguration {
     this.timelineCSSToggles["dot"] = [
       {
         name: "Dot collapsible",
-        description: "Dates with descriptions can be collapsed",
+        description: "Dots with details can be collapsed",
         image: "CollapsingDot.gif",
         enabled: false,
         true: {

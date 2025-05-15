@@ -152,6 +152,10 @@ body {
       font-style: italic;
       margin: 15px;
     }
+
+    th, td {
+      border: none !important;
+    }
   }
 }
 
