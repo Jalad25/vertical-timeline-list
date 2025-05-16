@@ -1,6 +1,21 @@
 import { ColorSpace } from 'src/constants'
 import { returnColorSpaceValueFromHex, currentColorScheme } from 'src/utilities';
 
+//#region Images
+
+// @ts-ignore  
+import CollapsibleDot from 'screenshots/CollapsibleDot.png';
+// @ts-ignore  
+import CollapsingDot from 'screenshots/CollapsingDot.gif';
+// @ts-ignore  
+import Dot from 'screenshots/Dot.png';
+// @ts-ignore  
+import DotDescription from 'screenshots/DotDescription.png';
+// @ts-ignore  
+import Line from 'screenshots/Line.png';
+
+//#endregion
+
 //#region Configuration
 
 type ConfigurationDetails = {
@@ -55,7 +70,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot color",
         description: "Dots without details",
-        image: "Dot.png",
+        image: Dot.replace('./', ''),
         0: {
           property: "color",
           value: "#888888",
@@ -70,7 +85,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot collapsible color",
         description: "Dots with details",
-        image: "CollapsibleDot.png",
+        image: CollapsibleDot.replace('./', ''),
         0: {
           property: "collapsible-color",
           value: "#8A5CF5",
@@ -85,7 +100,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot collapsible hover color",
         description: "Only visible when collapsible option is on",
-        image: "CollapsibleDot.png",
+        image: CollapsibleDot.replace('./', ''),
         0: {
           property: "collapsible-shadow-color",
           value: "#8A5CF5",
@@ -102,7 +117,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Line color",
         description: "",
-        image: "Line.png",
+        image: Line.replace('./', ''),
         0: {
           property: "color",
           value: "#ffffff",
@@ -119,7 +134,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot details background color",
         description: "",
-        image: "DotDescription.png",
+        image: DotDescription.replace('./', ''),
         0: {
           property: "background-color",
           value: "#00000067",
@@ -138,7 +153,7 @@ export class VerticalTimelineListPluginConfiguration {
       {
         name: "Dot collapsible",
         description: "Dots with details can be collapsed",
-        image: "CollapsingDot.gif",
+        image: CollapsingDot.replace('./', ''),
         enabled: false,
         true: {
           "collapsible": [

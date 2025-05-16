@@ -271,7 +271,7 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
       const tooltip = (el.infoEl.firstChild as HTMLElement).createDiv({ cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip` });
       const tooltipIcon = tooltip.createDiv({ cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip-icon` });
       setIcon(tooltipIcon, "info");
-      tooltip.createEl("img", { cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip-image`, attr: { src: this.plugin.app.vault.adapter.getResourcePath(`${this.plugin.PLUGIN_ROOT}/screenshots/${tooltipImagePath}`) } });
+      tooltip.createEl("img", { cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip-image`, attr: { src: tooltipImagePath } });
     }
     return el;
   }
