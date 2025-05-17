@@ -1,4 +1,4 @@
-import { ColorSpace } from 'src/constants'
+import { ColorSpace, Theme } from 'src/constants'
 import { returnColorSpaceValueFromHex, currentColorScheme } from 'src/utilities';
 
 //#region Images
@@ -61,10 +61,15 @@ interface TimelinePiece {
 
 export class VerticalTimelineListPluginConfiguration {
   pluginPrefix: string
+  version: string;
   "timelineThemesCSSColors": TimelinePiece = {};
   "timelineCSSToggles": TimelinePiece = {};
 
-  constructor(pluginPrefix: string) {
+  constructor (pluginPrefix: string, version: string) {
+    //Set version and plugin prefix
+    this.version = version;
+    this.pluginPrefix = pluginPrefix;
+
     //Set CSS Properties for Themes
     this.timelineThemesCSSColors["dot"] = [
       {
@@ -181,11 +186,9 @@ export class VerticalTimelineListPluginConfiguration {
         }
       } as CSSToggleProperties & ConfigurationDetails
     ];
-
-    this.pluginPrefix = pluginPrefix;
   }
 
-  async loadConfiguration() {
+  async loadConfiguration () {
     // Set CSS Color
     Object.keys(this.timelineThemesCSSColors).forEach(
       (timelinePiece: keyof TimelinePiece) => {
@@ -218,6 +221,41 @@ export class VerticalTimelineListPluginConfiguration {
         )
       }
     )
+  }
+
+  async loadExistingConfiguration (savedConfiguration: any) {
+    if (savedConfiguration && savedConfiguration !== null) {
+      //Override CSS Properties for Themes
+      Object.keys(this.timelineThemesCSSColors).forEach(
+        (timelinePieceKey: string) => {
+          if (savedConfiguration.timelineThemesCSSColors[timelinePieceKey]) {
+            this.timelineThemesCSSColors[timelinePieceKey].forEach(
+              (cssColorProperty: ThemesCSSColorProperty & ConfigurationDetails, index: number) => {
+                if (cssColorProperty.name === savedConfiguration.timelineThemesCSSColors[timelinePieceKey][index].name) {
+                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value;
+                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value;
+                }
+              }
+            );
+          }
+        }
+      );
+
+      //Override CSS Properites based on toggles
+      Object.keys(this.timelineCSSToggles).forEach(
+        (timelinePieceKey: string) => {
+          if (savedConfiguration.timelineCSSToggles[timelinePieceKey]) {
+            this.timelineCSSToggles[timelinePieceKey].forEach(
+              (cssToggleProperty: CSSToggleProperties & ConfigurationDetails, index: number) => {
+                if (cssToggleProperty.name === savedConfiguration.timelineCSSToggles[timelinePieceKey][index].name) {
+                  (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled = (savedConfiguration.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled ?? (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled;
+                }
+              }
+            );
+          }
+        }
+      );
+    }
   }
 
   private buildCSSProperty (piece: string, cssProperty: string) : string {

@@ -5,10 +5,9 @@ import { VerticalTimelineListPluginSettingsTab } from 'src/settings'
 export default class VerticalTimelineListPlugin extends Plugin {
   configuration: VerticalTimelineListPluginConfiguration;
   PLUGIN_PREFIX = "timeline";
-  PLUGIN_ROOT = ".obsidian/plugins/vertical-timeline-list"
 
 	async onload() {
-		await this.loadSettings(new VerticalTimelineListPluginConfiguration(this.PLUGIN_PREFIX));
+		await this.loadSettings(new VerticalTimelineListPluginConfiguration(this.PLUGIN_PREFIX, "1.1.1"));
     
     await this.configuration.loadConfiguration();
 
@@ -22,7 +21,9 @@ export default class VerticalTimelineListPlugin extends Plugin {
   }
 
 	async loadSettings(defaultConfiguration: VerticalTimelineListPluginConfiguration) {
-    this.configuration = Object.assign(defaultConfiguration, await this.loadData());
+    await defaultConfiguration.loadExistingConfiguration(await this.loadData());
+    this.configuration = defaultConfiguration;
+    this.saveSettings();
 	}
 
 	async saveSettings() {
