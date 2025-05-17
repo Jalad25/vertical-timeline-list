@@ -19,6 +19,7 @@ import Line from 'screenshots/Line.png';
 //#region Configuration
 
 type ConfigurationDetails = {
+  id: string;
   name: string | undefined;
   description: string | undefined;
   image: string | undefined;
@@ -73,9 +74,10 @@ export class VerticalTimelineListPluginConfiguration {
     //Set CSS Properties for Themes
     this.timelineThemesCSSColors["dot"] = [
       {
+        id: "dot-color",
         name: "Dot color",
         description: "Dots without details",
-        image: Dot.replace('./', ''),
+        image: Dot,
         0: {
           property: "color",
           value: "#888888",
@@ -88,9 +90,10 @@ export class VerticalTimelineListPluginConfiguration {
         }
       } as ThemesCSSColorProperty & ConfigurationDetails,
       {
+        id: "dot-collapsible-color",
         name: "Dot collapsible color",
         description: "Dots with details",
-        image: CollapsibleDot.replace('./', ''),
+        image: CollapsibleDot,
         0: {
           property: "collapsible-color",
           value: "#8A5CF5",
@@ -103,9 +106,10 @@ export class VerticalTimelineListPluginConfiguration {
         }
       } as ThemesCSSColorProperty & ConfigurationDetails,
       {
+        id: "dot-collapsible-shadow-color",
         name: "Dot collapsible hover color",
         description: "Only visible when collapsible option is on",
-        image: CollapsibleDot.replace('./', ''),
+        image: CollapsibleDot,
         0: {
           property: "collapsible-shadow-color",
           value: "#8A5CF5",
@@ -120,9 +124,10 @@ export class VerticalTimelineListPluginConfiguration {
     ];
     this.timelineThemesCSSColors["line"] = [
       {
+        id: "line-color",
         name: "Line color",
         description: "",
-        image: Line.replace('./', ''),
+        image: Line,
         0: {
           property: "color",
           value: "#ffffff",
@@ -137,9 +142,10 @@ export class VerticalTimelineListPluginConfiguration {
     ];
     this.timelineThemesCSSColors["dotChildren"] = [
       {
+        id: "dotChildren-background-color",
         name: "Dot details background color",
         description: "",
-        image: DotDescription.replace('./', ''),
+        image: DotDescription,
         0: {
           property: "background-color",
           value: "#00000067",
@@ -156,9 +162,10 @@ export class VerticalTimelineListPluginConfiguration {
     //Set CSS Properties based on toggles
     this.timelineCSSToggles["dot"] = [
       {
+        id: "dot-collapsible",
         name: "Dot collapsible",
         description: "Dots with details can be collapsed",
-        image: CollapsingDot.replace('./', ''),
+        image: CollapsingDot,
         enabled: false,
         true: {
           "collapsible": [
@@ -231,9 +238,10 @@ export class VerticalTimelineListPluginConfiguration {
           if (savedConfiguration.timelineThemesCSSColors[timelinePieceKey]) {
             this.timelineThemesCSSColors[timelinePieceKey].forEach(
               (cssColorProperty: ThemesCSSColorProperty & ConfigurationDetails, index: number) => {
-                if (cssColorProperty.name === savedConfiguration.timelineThemesCSSColors[timelinePieceKey][index].name) {
-                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value;
-                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value;
+                const savedPropertyIndex = savedConfiguration.timelineThemesCSSColors[timelinePieceKey].findIndex((value: ThemesCSSColorProperty & ConfigurationDetails) => { return value.id === cssColorProperty.id; });
+                if (savedPropertyIndex > -1) {
+                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][savedPropertyIndex] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value;
+                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][savedPropertyIndex] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value;
                 }
               }
             );
@@ -247,8 +255,9 @@ export class VerticalTimelineListPluginConfiguration {
           if (savedConfiguration.timelineCSSToggles[timelinePieceKey]) {
             this.timelineCSSToggles[timelinePieceKey].forEach(
               (cssToggleProperty: CSSToggleProperties & ConfigurationDetails, index: number) => {
-                if (cssToggleProperty.name === savedConfiguration.timelineCSSToggles[timelinePieceKey][index].name) {
-                  (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled = (savedConfiguration.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled ?? (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled;
+                const savedPropertyIndex = savedConfiguration.timelineCSSToggles[timelinePieceKey].findIndex((value: CSSToggleProperties & ConfigurationDetails) => { return value.id === cssToggleProperty.id; });
+                if (savedPropertyIndex > -1) {
+                  (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled = (savedConfiguration.timelineCSSToggles[timelinePieceKey][savedPropertyIndex] as CSSToggleProperties & ConfigurationDetails).enabled ?? (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled;
                 }
               }
             );

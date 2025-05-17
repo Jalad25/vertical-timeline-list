@@ -2,21 +2,21 @@
 
 body {
   /* Timeline Line Styling */
-  --timeline-line-width: 3px;
-  --timeline-line-padding: 12px;
-  --timeline-line-style: solid;
-  --timeline-line-margin-inline-start: 0px;
+  --vertical-timeline-list-line-width: 3px;
+  --vertical-timeline-list-line-padding: 12px;
+  --vertical-timeline-list-line-style: solid;
+  --vertical-timeline-list-line-margin-inline-start: 0px;
 
   /* Timeline Dot Styling */
-  --timeline-dot-separation: 10px;
-  --timeline-dot-right-padding: 20px;
-  --timeline-dot-size: 18px;
+  --vertical-timeline-list-dot-separation: 10px;
+  --vertical-timeline-list-dot-right-padding: 20px;
+  --vertical-timeline-list-dot-size: 18px;
 
   /* Timeline Dot Children Styling */
-  --timeline-dotChildren-padding: 10px;
-  --timeline-dotChildren-left-add-padding: 25px;
-  --timeline-dotChildren-top-margin: 10px;
-  --timeline-dotChildren-bottom-margin: 10px;
+  --vertical-timeline-list-dotChildren-padding: 10px;
+  --vertical-timeline-list-dotChildren-left-add-padding: 25px;
+  --vertical-timeline-list-dotChildren-top-margin: 10px;
+  --vertical-timeline-list-dotChildren-bottom-margin: 10px;
 }
 
 /* Hides indentation guide only on timeline */
@@ -26,7 +26,7 @@ body {
 
 /* Timeline */
 .el-ul ul li[data-task="t"] {
-  margin-inline-start: var(--timeline-line-margin-inline-start);
+  margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
 
   /* Hide Timeline Parent Task */
   > input[type="checkbox"],
@@ -37,42 +37,42 @@ body {
 
   /* Timeline Bullets & Line */
   > ul > li {
-    border-left-width: var(--timeline-line-width);
-    border-left-style: var(--timeline-line-style);
-    padding-inline: var(--timeline-line-padding);   
-    margin-inline-start: var(--timeline-line-margin-inline-start);
-    border-left-color: var(--timeline-line-color);
+    border-left-width: var(--vertical-timeline-list-line-width);
+    border-left-style: var(--vertical-timeline-list-line-style);
+    padding-inline: var(--vertical-timeline-list-line-padding);   
+    margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
+    border-left-color: var(--vertical-timeline-list-line-color);
 
     &:not(:last-child) {
-      padding-bottom: var(--timeline-dot-separation);
+      padding-bottom: var(--vertical-timeline-list-dot-separation);
     }
 
     > span.list-bullet {
-      padding-right: var(--timeline-dot-right-padding);
+      padding-right: var(--vertical-timeline-list-dot-right-padding);
 
       &:has(+ span.list-collapse-indicator) {
         &:after {
-          background-color: var(--timeline-dot-collapsible-color);
+          background-color: var(--vertical-timeline-list-dot-collapsible-color);
         }
       }
 
       &:has(+ span.list-collapse-indicator:hover) {
         &:after {
-          box-shadow: 0 0 0 4px var(--timeline-dot-collapsible-shadow-color);
+          box-shadow: 0 0 0 4px var(--vertical-timeline-list-dot-collapsible-shadow-color);
         }
       }
 
       &:after {
-        width: var(--timeline-dot-size);
-        height: var(--timeline-dot-size);
-        background-color: var(--timeline-dot-color);
-        color: var(--timeline-dot-color);
+        width: var(--vertical-timeline-list-dot-size);
+        height: var(--vertical-timeline-list-dot-size);
+        background-color: var(--vertical-timeline-list-dot-color);
+        color: var(--vertical-timeline-list-dot-color);
       }
     }
 
     > span.list-collapse-indicator {
-      display: var(--timeline-dot-collapsible-display);  /* Allow Collapsing */
-      cursor: var(--timeline-dot-collapsible-cursor); /* Allow Collapsing */
+      display: var(--vertical-timeline-list-dot-collapsible-display);  /* Allow Collapsing */
+      cursor: var(--vertical-timeline-list-dot-collapsible-cursor); /* Allow Collapsing */
 
       svg {
         color: transparent !important;
@@ -81,13 +81,13 @@ body {
 
     > ul > li {
       border-radius: 10px;
-      margin-inline-start: var(--timeline-line-margin-inline-start);
-      padding: var(--timeline-dotChildren-padding) var(--timeline-dotChildren-padding) var(--timeline-dotChildren-padding) calc(var(--timeline-dotChildren-left-add-padding) + var(--timeline-dotChildren-padding));
-      margin-top: var(--timeline-dotChildren-top-margin);
-      background-color: var(--timeline-dotChildren-background-color);
+      margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
+      padding: var(--vertical-timeline-list-dotChildren-padding) var(--vertical-timeline-list-dotChildren-padding) var(--vertical-timeline-list-dotChildren-padding) calc(var(--vertical-timeline-list-dotChildren-left-add-padding) + var(--vertical-timeline-list-dotChildren-padding));
+      margin-top: var(--vertical-timeline-list-dotChildren-top-margin);
+      background-color: var(--vertical-timeline-list-dotChildren-background-color);
 
       &:not(:last-child) {
-        margin-bottom: var(--timeline-dotChildren-bottom-margin);
+        margin-bottom: var(--vertical-timeline-list-dotChildren-bottom-margin);
       }
     }
   }
@@ -97,21 +97,21 @@ body {
 
 /* #region Settings */
 
-.timeline-setting-section {
+.vertical-timeline-list-setting-section {
   margin-bottom: 10px;
 
-  .timeline-setting-input {
+  .vertical-timeline-list-setting-input {
     padding: 0.75em 0 !important;
 
-    .timeline-setting-tooltip {
+    .vertical-timeline-list-setting-tooltip {
       display: inline;
 
-      .timeline-setting-tooltip-icon {
+      .vertical-timeline-list-setting-tooltip-icon {
         display: inline;
         margin-left: 5px;
       }
       
-      .timeline-setting-tooltip-image {
+      .vertical-timeline-list-setting-tooltip-image {
         visibility: hidden;
         width: 500px;
         background-color: #555;
@@ -127,7 +127,7 @@ body {
 
       &:hover,
       &:active {
-        .timeline-setting-tooltip-image {
+        .vertical-timeline-list-setting-tooltip-image {
           visibility: visible;
           opacity: 1;
         }
@@ -139,14 +139,14 @@ body {
     }
   }
 
-  > .timeline-setting-section-header {
+  > .vertical-timeline-list-setting-section-header {
     font-size: larger;
     font-weight: bolder;
     width: 100%;
     border-bottom: 1px solid var(--background-modifier-border) !important;
   }
 
-  .timeline-setting-table {
+  .vertical-timeline-list-setting-table {
     caption {
       text-align: left;
       font-style: italic;

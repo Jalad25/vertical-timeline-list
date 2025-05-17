@@ -4,10 +4,9 @@ import { VerticalTimelineListPluginSettingsTab } from 'src/settings'
 
 export default class VerticalTimelineListPlugin extends Plugin {
   configuration: VerticalTimelineListPluginConfiguration;
-  PLUGIN_PREFIX = "timeline";
 
 	async onload() {
-		await this.loadSettings(new VerticalTimelineListPluginConfiguration(this.PLUGIN_PREFIX, "1.1.1"));
+		await this.loadSettings(new VerticalTimelineListPluginConfiguration(this.manifest.id, this.manifest.version));
     
     await this.configuration.loadConfiguration();
 

@@ -170,6 +170,8 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
 
     containerEl.empty();
 
+    containerEl.createDiv({ attr: { style: "text-align:right;" }, text: `Version: ${this.plugin.manifest.version}` });
+
     // CSS Colors
     let section = this.addSettingSection(containerEl, "Theme colors");
     this.addThemeColorTable(section, Object.values(this.settings.timelineThemesCSSColors).flat() as ThemesCSSColorSetting[]);
@@ -189,18 +191,18 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
   }
 
   private addSettingSection(containerEl: HTMLElement, sectionHeader: string, sectionDescription?: string) : HTMLElement {
-    const container = containerEl.createDiv({ cls: `${this.plugin.PLUGIN_PREFIX}-setting-section` });
+    const container = containerEl.createDiv({ cls: `${this.plugin.manifest.id}-setting-section` });
     const header = this.addSettingDisplay(container, undefined, sectionHeader, sectionDescription);
-    header.setClass("timeline-setting-section-header").setHeading();
+    header.setClass(`${this.plugin.manifest.id}-setting-section-header`).setHeading();
     return container;
   }
 
   private addThemeColorTable(containerEl: HTMLElement, rows: ThemesCSSColorSetting[], name?: string, description?: string) {
     const columns = ["", "Light", "Dark"];
-    const table = containerEl.createEl("table", { cls: `${this.plugin.PLUGIN_PREFIX}-setting-table` });
+    const table = containerEl.createEl("table", { cls: `${this.plugin.manifest.id}-setting-table` });
 
     if (name) {
-      const tableNameContainer = table.createEl("thead", { cls: `${this.plugin.PLUGIN_PREFIX}-header` });
+      const tableNameContainer = table.createEl("thead", { cls: `${this.plugin.manifest.id}-header` });
       const tableNameRow = tableNameContainer.createEl("tr");
       tableNameRow.createEl("th", { text: name, attr: { colspan: columns.length } });
     }
@@ -264,14 +266,14 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
 
   private addSettingDisplay(containerEl: HTMLElement, tooltipImagePath?: string, name?: string, description?: string) : Setting {
     const el =  new Setting(containerEl)
-                    .setClass(`${this.plugin.PLUGIN_PREFIX}-setting-input`)
+                    .setClass(`${this.plugin.manifest.id}-setting-input`)
                     .setName(name ?? "")
                     .setDesc(description ?? "");
     if (tooltipImagePath) {
-      const tooltip = (el.infoEl.firstChild as HTMLElement).createDiv({ cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip` });
-      const tooltipIcon = tooltip.createDiv({ cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip-icon` });
+      const tooltip = (el.infoEl.firstChild as HTMLElement).createDiv({ cls: `${this.plugin.manifest.id}-setting-tooltip` });
+      const tooltipIcon = tooltip.createDiv({ cls: `${this.plugin.manifest.id}-setting-tooltip-icon` });
       setIcon(tooltipIcon, "info");
-      tooltip.createEl("img", { cls: `${this.plugin.PLUGIN_PREFIX}-setting-tooltip-image`, attr: { src: tooltipImagePath } });
+      tooltip.createEl("img", { cls: `${this.plugin.manifest.id}-setting-tooltip-image`, attr: { src: tooltipImagePath } });
     }
     return el;
   }
