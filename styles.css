@@ -93,7 +93,8 @@ body {
 /* #region Settings */
 
 .vertical-timeline-list-setting-section {
-  margin-bottom: 10px;
+  margin-bottom: 0.75em;
+  padding-bottom: 0.75em;
 
   .vertical-timeline-list-setting-input {
     .vertical-timeline-list-setting-tooltip {
@@ -112,7 +113,7 @@ body {
         text-align: center;
         border-radius: 6px;
         padding: 5px;
-        position: absolute;
+        position: fixed;
         z-index: 1;
         opacity: 0;
         transition: opacity 0.3s;
@@ -140,6 +141,8 @@ body {
   }
 
   .vertical-timeline-list-setting-table {
+    margin-top: 10px;
+
     caption {
       text-align: left;
       font-style: italic;

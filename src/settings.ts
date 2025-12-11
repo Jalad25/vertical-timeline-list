@@ -215,7 +215,7 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
     containerEl.createDiv({ attr: { style: "text-align:right;" }, text: `Version: ${this.plugin.manifest.version}` });
 
     // CSS Dimensions
-    let section = this.addSettingSection(containerEl, "Spacing");
+    let section = this.addSettingSection(containerEl, "Spacing", "All units in px");
     Object.keys(this.settings.timelineCSSDimensions).forEach(
       (settingKey: keyof TimelinePieceSetting) => {
         const dimensionCSSSetting = this.settings.timelineCSSDimensions[settingKey] as DimensionCSSSetting[];
