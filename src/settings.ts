@@ -1,13 +1,14 @@
 import { App, PluginSettingTab, Setting, setIcon } from 'obsidian';
 import VerticalTimelineListPlugin from 'src/main';
 import { Theme, ColorSpace } from 'src/constants'
-import { ThemesCSSColorProperty, CSSColorProperty, CSSToggleProperties } from "src/configuration"
+import { ThemesCSSColorProperty, CSSColorProperty, CSSToggleProperties, CSSDimensionProperty } from "src/configuration"
 
 //#region Constants
 
 enum SettingInputType {
   color,
-  boolean
+  boolean,
+  number
 }
 
 //#endregion
@@ -66,6 +67,18 @@ class BooleanInput extends SettingInput {
   }
 }
 
+class NumberInput extends SettingInput {
+  value: number;
+  onChange: (plugin: VerticalTimelineListPlugin, value: number) => void;
+
+  constructor(disabled: boolean, hidden: boolean, value?: number, onChange?: (plugin: VerticalTimelineListPlugin, value: number) => void, tooltipImagePath?: string, name?: string, description?: string) {
+    super(SettingInputType.number, disabled, hidden, tooltipImagePath, name, description);
+
+    this.value = value ?? 0;
+    this.onChange = onChange ?? (async (plugin: VerticalTimelineListPlugin, value: number) => { return; });
+  }
+}
+
 //#endregion
 
 //#endregion
@@ -111,11 +124,27 @@ class ToggleCSSSetting {
   }
 }
 
+class DimensionCSSSetting {
+  dimension: NumberInput;
+  unit: string;
+
+  constructor(unit: string, plugin: VerticalTimelineListPlugin, key: string, index: number, disabled: boolean, hidden: boolean, tooltipImagePath?: string, name?: string, description?: string) {
+    this.unit = unit;
+    this.dimension = new NumberInput(disabled, hidden, parseInt(((plugin.configuration.timelineCSSDimensions[key] as CSSDimensionProperty[])[index] as CSSDimensionProperty).value.replace(this.unit, ""), 10), async (plugin: VerticalTimelineListPlugin, value: number) => {
+      ((plugin.configuration.timelineCSSDimensions[key] as CSSDimensionProperty[])[index] as CSSDimensionProperty).value = `${value}${unit}`;
+      this.dimension.value = value;
+      await plugin.saveSettings();
+      await plugin.configuration.loadConfiguration();
+    }, tooltipImagePath, name, description);
+  }
+}
+
 interface TimelinePieceSetting {
-  [key: string]: ThemesCSSColorSetting[] | ToggleCSSSetting[];
+  [key: string]: ThemesCSSColorSetting[] | ToggleCSSSetting[] | DimensionCSSSetting[];
 }
 
 export class VerticalTimelineListPluginSettings {
+  "timelineCSSDimensions": TimelinePieceSetting = {};
   "timelineThemesCSSColors": TimelinePieceSetting = {};
   "timelineCSSToggles": TimelinePieceSetting = {};
 
@@ -123,6 +152,19 @@ export class VerticalTimelineListPluginSettings {
     Object.keys(this).forEach(
       (property: string) => {
         switch (property) {
+          case "timelineCSSDimensions": //Set CSS Settings for Dimensions
+            Object.keys(plugin.configuration[property]).forEach(
+              (timelinePiece: string) => {
+                const configurations = plugin.configuration[property][timelinePiece];
+                this[property][timelinePiece] = [] as DimensionCSSSetting[];
+                configurations.forEach(
+                  (configuration, index: number) => {
+                    (this[property][timelinePiece] as DimensionCSSSetting[]).push(new DimensionCSSSetting("px", plugin, timelinePiece, index, false, false, configuration.image, configuration.name, configuration.description));
+                  }
+                )
+              }
+            )
+            break;
           case "timelineThemesCSSColors": //Set CSS Settings for Themes
             Object.keys(plugin.configuration[property]).forEach(
               (timelinePiece: string) => {
@@ -172,8 +214,21 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
 
     containerEl.createDiv({ attr: { style: "text-align:right;" }, text: `Version: ${this.plugin.manifest.version}` });
 
+    // CSS Dimensions
+    let section = this.addSettingSection(containerEl, "Spacing");
+    Object.keys(this.settings.timelineCSSDimensions).forEach(
+      (settingKey: keyof TimelinePieceSetting) => {
+        const dimensionCSSSetting = this.settings.timelineCSSDimensions[settingKey] as DimensionCSSSetting[];
+        dimensionCSSSetting.forEach(
+          (setting: DimensionCSSSetting) => {
+            this.addInput(section, setting.dimension);
+          }
+        )
+      }
+    )
+
     // CSS Colors
-    let section = this.addSettingSection(containerEl, "Theme colors");
+    section = this.addSettingSection(containerEl, "Theme colors");
     this.addThemeColorTable(section, Object.values(this.settings.timelineThemesCSSColors).flat() as ThemesCSSColorSetting[]);
 
     // CSS Toggles 
@@ -239,6 +294,16 @@ export class VerticalTimelineListPluginSettingsTab extends PluginSettingTab {
     }
 
     switch (input.inputType) {
+      case SettingInputType.number:
+        const numberInput = input as NumberInput;
+        inputSetting.addText(t => t
+          .setValue(numberInput.value.toString())
+          .setDisabled(numberInput.disabled)
+          .onChange((value: string) => {
+            numberInput.onChange(this.plugin, parseInt(value, 10));
+          })
+        );
+        break;
       case SettingInputType.color:
         const colorInput = input as ColorInput;
         inputSetting.addColorPicker(cp => cp

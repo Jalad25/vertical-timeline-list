@@ -3,20 +3,20 @@
 body {
   /* Timeline Line Styling */
   --vertical-timeline-list-line-width: 3px;
-  --vertical-timeline-list-line-padding: 12px;
+  /*--vertical-timeline-list-line-padding: 12px; /* Line Padding */
   --vertical-timeline-list-line-style: solid;
   --vertical-timeline-list-line-margin-inline-start: 0px;
 
   /* Timeline Dot Styling */
-  --vertical-timeline-list-dot-separation: 10px;
-  --vertical-timeline-list-dot-right-padding: 20px;
+  /*--vertical-timeline-list-dot-separation: 10px; Dot separation */
+  --vertical-timeline-list-dot-right-padding: 20px; /* Dot right padding */
   --vertical-timeline-list-dot-size: 18px;
 
   /* Timeline Dot Children Styling */
-  --vertical-timeline-list-dotChildren-padding: 10px;
-  --vertical-timeline-list-dotChildren-left-add-padding: 25px;
-  --vertical-timeline-list-dotChildren-top-margin: 10px;
-  --vertical-timeline-list-dotChildren-bottom-margin: 10px;
+  /*--vertical-timeline-list-dotChildren-padding: 10px; /* Child top and bottom padding */
+  --vertical-timeline-list-dotChildren-left-add-padding: 25px; /* Left child bullet padding */
+  /*--vertical-timeline-list-dotChildren-top-margin: 10px; /* Child top margin */
+  /*--vertical-timeline-list-dotChildren-bottom-margin: 10px; /* Child bottom margin */
 }
 
 /* Hides indentation guide only on timeline */
@@ -101,8 +101,6 @@ body {
   margin-bottom: 10px;
 
   .vertical-timeline-list-setting-input {
-    padding: 0.75em 0 !important;
-
     .vertical-timeline-list-setting-tooltip {
       display: inline;
 
@@ -134,7 +132,7 @@ body {
       }
     }
 
-    > *:last-child {
+    > *:last-child:has(input[type="color"]) {
       margin-inline-end: 0.75em !important;
     }
   }
