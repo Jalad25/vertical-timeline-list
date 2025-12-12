@@ -1,7 +1,7 @@
 {
 	"id": "vertical-timeline-list",
 	"name": "Vertical Timeline List",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"minAppVersion": "1.10.6",
 	"description": "Utilizes task lists to create a timeline... or something resembling a timeline.",
 	"author": "Jalad",
