@@ -13,6 +13,16 @@ import Dot from 'screenshots/Dot.png';
 import DotDescription from 'screenshots/DotDescription.png';
 // @ts-ignore  
 import Line from 'screenshots/Line.png';
+// @ts-ignore
+import LinePadding from 'screenshots/LinePadding.png'
+// @ts-ignore
+import DotSeparation from 'screenshots/DotSeparation.png'
+// @ts-ignore
+import DotDetailPadding from 'screenshots/DotDetailPadding.png'
+// @ts-ignore
+import DotDetailTopSeparation from 'screenshots/DotDetailTopSeparation.png'
+// @ts-ignore
+import DotDetailBottomSeparation from 'screenshots/DotDetailBottomSeparation.png'
 
 //#endregion
 
@@ -52,17 +62,20 @@ export interface CSSToggleProperties {
   "false": CSSToggleProperty;
 }
 
+export type CSSDimensionProperty = CSSProperty;
+
 //#endregion
 
 //#region Plugin Configuration
 
 interface TimelinePiece {
-  [key: string]: ((ThemesCSSColorProperty | CSSToggleProperties) & ConfigurationDetails)[];
+  [key: string]: ((ThemesCSSColorProperty | CSSToggleProperties | CSSDimensionProperty) & ConfigurationDetails)[];
 }
 
 export class VerticalTimelineListPluginConfiguration {
   pluginPrefix: string
   version: string;
+  "timelineCSSDimensions": TimelinePiece = {};
   "timelineThemesCSSColors": TimelinePiece = {};
   "timelineCSSToggles": TimelinePiece = {};
 
@@ -70,6 +83,54 @@ export class VerticalTimelineListPluginConfiguration {
     //Set version and plugin prefix
     this.version = version;
     this.pluginPrefix = pluginPrefix;
+
+    //Set CSS Properties for Dimensions
+    this.timelineCSSDimensions["dot"] = [
+      {
+        id: "dot-separation",
+        name: "Dot separation",
+        description: "Gap between dots on line",
+        image: DotSeparation,
+        property: "separation",
+        value: "10px"
+      }
+    ];
+    this.timelineCSSDimensions["line"] = [
+      {
+        id: "line-padding",
+        name: "Line padding",
+        description: "Line left and right padding",
+        image: LinePadding,
+        property: "padding",
+        value: "12px"
+      }
+    ];
+    this.timelineCSSDimensions["dotChildren"] = [
+      {
+        id: "dotChildren-padding",
+        name: "Dot details padding",
+        description: "Details top, bottom, left, and right padding",
+        image: DotDetailPadding,
+        property: "padding",
+        value: "10px"
+      },
+      {
+        id: "dotChildren-top-margin",
+        name: "Dot details top separation",
+        description: "",
+        image: DotDetailTopSeparation,
+        property: "top-margin",
+        value: "10px"
+      },
+      {
+        id: "dotChildren-bottom-margin",
+        name: "Dot details bottom separation",
+        description: "",
+        image: DotDetailBottomSeparation,
+        property: "bottom-margin",
+        value: "10px"
+      }
+    ];
 
     //Set CSS Properties for Themes
     this.timelineThemesCSSColors["dot"] = [
@@ -196,6 +257,18 @@ export class VerticalTimelineListPluginConfiguration {
   }
 
   async loadConfiguration () {
+    // Set CSS Dimensions
+    Object.keys(this.timelineCSSDimensions).forEach(
+      (timelinePiece: keyof TimelinePiece) => {
+        const cssDimensionProperties = this.timelineCSSDimensions[timelinePiece] as CSSDimensionProperty[];
+        cssDimensionProperties.forEach(
+          (cssDimensionProperty: CSSDimensionProperty) => {
+            this.setCSSSetting(document, timelinePiece as string, cssDimensionProperty.property, cssDimensionProperty.value);
+          }
+        )
+      }
+    )
+
     // Set CSS Color
     Object.keys(this.timelineThemesCSSColors).forEach(
       (timelinePiece: keyof TimelinePiece) => {
@@ -232,6 +305,23 @@ export class VerticalTimelineListPluginConfiguration {
 
   async loadExistingConfiguration (savedConfiguration: any) {
     if (savedConfiguration && savedConfiguration !== null) {
+      //Override CSS Properties for Dimensions
+      Object.keys(this.timelineCSSDimensions).forEach(
+        (timelinePieceKey: string) => {
+          if (savedConfiguration.timelineCSSDimensions[timelinePieceKey]) {
+            this.timelineCSSDimensions[timelinePieceKey].forEach(
+              (cssDimensionProperty: CSSDimensionProperty & ConfigurationDetails, index: number) => {
+                const savedPropertyIndex = savedConfiguration.timelineCSSDimensions[timelinePieceKey].findIndex((value: CSSDimensionProperty & ConfigurationDetails) => { return value.id === cssDimensionProperty.id; });
+                if (savedPropertyIndex > -1) {
+                  (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).property = (savedConfiguration.timelineCSSDimensions[timelinePieceKey][savedPropertyIndex] as CSSDimensionProperty & ConfigurationDetails).property ?? (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).property;
+                  (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).value = (savedConfiguration.timelineCSSDimensions[timelinePieceKey][savedPropertyIndex] as CSSDimensionProperty & ConfigurationDetails).value ?? (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).value;
+                }
+              }
+            );
+          }
+        }
+      );
+
       //Override CSS Properties for Themes
       Object.keys(this.timelineThemesCSSColors).forEach(
         (timelinePieceKey: string) => {
