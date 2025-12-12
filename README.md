@@ -11,7 +11,7 @@ Timelines are denoted using a task list with a 't' within the brackets. The date
 For example, the following 
 ```
 # Example
-- [t]
+- [t] 
   - 2020
     - Detail for 2020
     - Additional detail for 2020
@@ -22,6 +22,10 @@ For example, the following
 shows as
 
 ![example](screenshots/Example.png)
+
+> **ATTENTION**
+> 
+> It is very important you add a space after the [t] as this is how Obsidian determines you are creating a task!
 
 ## Compatibility
 
