@@ -306,54 +306,61 @@ export class VerticalTimelineListPluginConfiguration {
   async loadExistingConfiguration (savedConfiguration: any) {
     if (savedConfiguration && savedConfiguration !== null) {
       //Override CSS Properties for Dimensions
-      Object.keys(this.timelineCSSDimensions).forEach(
-        (timelinePieceKey: string) => {
-          if (savedConfiguration.timelineCSSDimensions[timelinePieceKey]) {
-            this.timelineCSSDimensions[timelinePieceKey].forEach(
-              (cssDimensionProperty: CSSDimensionProperty & ConfigurationDetails, index: number) => {
-                const savedPropertyIndex = savedConfiguration.timelineCSSDimensions[timelinePieceKey].findIndex((value: CSSDimensionProperty & ConfigurationDetails) => { return value.id === cssDimensionProperty.id; });
-                if (savedPropertyIndex > -1) {
-                  (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).property = (savedConfiguration.timelineCSSDimensions[timelinePieceKey][savedPropertyIndex] as CSSDimensionProperty & ConfigurationDetails).property ?? (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).property;
-                  (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).value = (savedConfiguration.timelineCSSDimensions[timelinePieceKey][savedPropertyIndex] as CSSDimensionProperty & ConfigurationDetails).value ?? (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).value;
+      
+      if (savedConfiguration.timelineCSSDimensions) {
+        Object.keys(this.timelineCSSDimensions).forEach(
+          (timelinePieceKey: string) => {
+            if (savedConfiguration.timelineCSSDimensions[timelinePieceKey]) {
+              this.timelineCSSDimensions[timelinePieceKey].forEach(
+                (cssDimensionProperty: CSSDimensionProperty & ConfigurationDetails, index: number) => {
+                  const savedPropertyIndex = savedConfiguration.timelineCSSDimensions[timelinePieceKey].findIndex((value: CSSDimensionProperty & ConfigurationDetails) => { return value.id === cssDimensionProperty.id; });
+                  if (savedPropertyIndex > -1) {
+                    (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).property = (savedConfiguration.timelineCSSDimensions[timelinePieceKey][savedPropertyIndex] as CSSDimensionProperty & ConfigurationDetails).property ?? (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).property;
+                    (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).value = (savedConfiguration.timelineCSSDimensions[timelinePieceKey][savedPropertyIndex] as CSSDimensionProperty & ConfigurationDetails).value ?? (this.timelineCSSDimensions[timelinePieceKey][index] as CSSDimensionProperty & ConfigurationDetails).value;
+                  }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
 
       //Override CSS Properties for Themes
-      Object.keys(this.timelineThemesCSSColors).forEach(
-        (timelinePieceKey: string) => {
-          if (savedConfiguration.timelineThemesCSSColors[timelinePieceKey]) {
-            this.timelineThemesCSSColors[timelinePieceKey].forEach(
-              (cssColorProperty: ThemesCSSColorProperty & ConfigurationDetails, index: number) => {
-                const savedPropertyIndex = savedConfiguration.timelineThemesCSSColors[timelinePieceKey].findIndex((value: ThemesCSSColorProperty & ConfigurationDetails) => { return value.id === cssColorProperty.id; });
-                if (savedPropertyIndex > -1) {
-                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][savedPropertyIndex] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value;
-                  (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][savedPropertyIndex] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value;
+      if (savedConfiguration.timelineThemesCSSColors) {
+        Object.keys(this.timelineThemesCSSColors).forEach(
+          (timelinePieceKey: string) => {
+            if (savedConfiguration.timelineThemesCSSColors[timelinePieceKey]) {
+              this.timelineThemesCSSColors[timelinePieceKey].forEach(
+                (cssColorProperty: ThemesCSSColorProperty & ConfigurationDetails, index: number) => {
+                  const savedPropertyIndex = savedConfiguration.timelineThemesCSSColors[timelinePieceKey].findIndex((value: ThemesCSSColorProperty & ConfigurationDetails) => { return value.id === cssColorProperty.id; });
+                  if (savedPropertyIndex > -1) {
+                    (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][savedPropertyIndex] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.dark].value;
+                    (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value = (savedConfiguration.timelineThemesCSSColors[timelinePieceKey][savedPropertyIndex] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value ?? (this.timelineThemesCSSColors[timelinePieceKey][index] as ThemesCSSColorProperty & ConfigurationDetails)[Theme.light].value;
+                  }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
 
       //Override CSS Properites based on toggles
-      Object.keys(this.timelineCSSToggles).forEach(
-        (timelinePieceKey: string) => {
-          if (savedConfiguration.timelineCSSToggles[timelinePieceKey]) {
-            this.timelineCSSToggles[timelinePieceKey].forEach(
-              (cssToggleProperty: CSSToggleProperties & ConfigurationDetails, index: number) => {
-                const savedPropertyIndex = savedConfiguration.timelineCSSToggles[timelinePieceKey].findIndex((value: CSSToggleProperties & ConfigurationDetails) => { return value.id === cssToggleProperty.id; });
-                if (savedPropertyIndex > -1) {
-                  (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled = (savedConfiguration.timelineCSSToggles[timelinePieceKey][savedPropertyIndex] as CSSToggleProperties & ConfigurationDetails).enabled ?? (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled;
+      if (savedConfiguration.timelineCSSToggles) {
+        Object.keys(this.timelineCSSToggles).forEach(
+          (timelinePieceKey: string) => {
+            if (savedConfiguration.timelineCSSToggles && savedConfiguration.timelineCSSToggles[timelinePieceKey]) {
+              this.timelineCSSToggles[timelinePieceKey].forEach(
+                (cssToggleProperty: CSSToggleProperties & ConfigurationDetails, index: number) => {
+                  const savedPropertyIndex = savedConfiguration.timelineCSSToggles[timelinePieceKey].findIndex((value: CSSToggleProperties & ConfigurationDetails) => { return value.id === cssToggleProperty.id; });
+                  if (savedPropertyIndex > -1) {
+                    (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled = (savedConfiguration.timelineCSSToggles[timelinePieceKey][savedPropertyIndex] as CSSToggleProperties & ConfigurationDetails).enabled ?? (this.timelineCSSToggles[timelinePieceKey][index] as CSSToggleProperties & ConfigurationDetails).enabled;
+                  }
                 }
-              }
-            );
+              );
+            }
           }
-        }
-      );
+        );
+      }
     }
   }
 
