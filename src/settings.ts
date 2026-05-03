@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting, setIcon } from 'obsidian';
+import { App, PluginSettingTab, Setting, setIcon } from "obsidian";
 import VerticalTimelineListPlugin from 'src/main';
 import { Theme, ColorSpace } from 'src/constants'
 import { ThemesCSSColorProperty, CSSColorProperty, CSSToggleProperties, CSSDimensionProperty } from "src/configuration"

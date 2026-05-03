@@ -1,4 +1,4 @@
-import { Plugin } from 'obsidian';
+import { Plugin } from "obsidian";
 import { VerticalTimelineListPluginConfiguration } from 'src/configuration'
 import { VerticalTimelineListPluginSettingsTab } from 'src/settings'
 

@@ -1,4 +1,4 @@
-import { ColorSpace, Theme } from 'src/constants'
+import { ColorSpace, Theme } from 'src/constants';
 import { returnColorSpaceValueFromHex, currentColorScheme } from 'src/utilities';
 
 //#region Images
