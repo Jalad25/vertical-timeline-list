@@ -9,16 +9,16 @@ import { applyCssVariables } from "./CssApplier";
 
 //#region Images
 
-import CollapsibleDot from "../screenshots/CollapsibleDot.png";
-import CollapsingDot from "../screenshots/CollapsingDot.gif";
-import Dot from "../screenshots/Dot.png";
-import DotDescription from "../screenshots/DotDescription.png";
-import Line from "../screenshots/Line.png";
-import LinePadding from "../screenshots/LinePadding.png";
-import DotSeparation from "../screenshots/DotSeparation.png";
-import DotDetailPadding from "../screenshots/DotDetailPadding.png";
-import DotDetailTopSeparation from "../screenshots/DotDetailTopSeparation.png";
-import DotDetailBottomSeparation from "../screenshots/DotDetailBottomSeparation.png";
+import CollapsibleDot from "../assets/screenshots/CollapsibleDot.png";
+import CollapsingDot from "../assets/screenshots/CollapsingDot.gif";
+import Dot from "../assets/screenshots/Dot.png";
+import DotDescription from "../assets/screenshots/DotDescription.png";
+import Line from "../assets/screenshots/Line.png";
+import LinePadding from "../assets/screenshots/LinePadding.png";
+import DotSeparation from "../assets/screenshots/DotSeparation.png";
+import DotDetailPadding from "../assets/screenshots/DotDetailPadding.png";
+import DotDetailTopSeparation from "../assets/screenshots/DotDetailTopSeparation.png";
+import DotDetailBottomSeparation from "../assets/screenshots/DotDetailBottomSeparation.png";
 
 //#endregion
 
@@ -87,7 +87,6 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
 
   private dimensionSetting(el: HTMLElement, name: string, desc: string, img: string, key: NumberKey): void {
     const setting = new Setting(el)
-      .setClass(`${this.plugin.manifest.id}-setting-input`)
       .setName(name)
       .setDesc(desc)
       .addText((t) =>
@@ -105,7 +104,6 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
 
   private toggleSetting(el: HTMLElement, name: string, desc: string, img: string, key: BooleanKey): void {
     const setting = new Setting(el)
-      .setClass(`${this.plugin.manifest.id}-setting-input`)
       .setName(name)
       .setDesc(desc)
       .addToggle((t) =>
@@ -138,10 +136,10 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       const tr = tbody.createEl("tr");
 
       const labelCell = tr.createEl("td", { cls: `${this.plugin.manifest.id}-setting-table-label` });
-      const nameEl = labelCell.createEl("div", { text: row.name, cls: `${this.plugin.manifest.id}-setting-table-name` });
+      const nameEl = labelCell.createDiv({ text: row.name, cls: `${this.plugin.manifest.id}-setting-table-name` });
       this.addTooltipImage(nameEl, row.img);
       if (row.desc) {
-        labelCell.createEl("div", { text: row.desc, cls: `${this.plugin.manifest.id}-setting-table-desc` });
+        labelCell.createDiv({ text: row.desc, cls: `${this.plugin.manifest.id}-setting-table-desc` });
       }
 
       this.renderColorCell(tr.createEl("td", { cls: `${this.plugin.manifest.id}-setting-table-swatch` }), row.key, "light");
@@ -152,10 +150,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
   private renderColorCell(td: HTMLElement, key: ColorKey, theme: "light" | "dark"): void {
     const input = td.createEl("input", { type: "color" });
     input.value = this.plugin.settings[key][theme];
-    input.addEventListener("input", async () => {
+    input.addEventListener("input", () => {
       this.plugin.settings[key][theme] = input.value;
-      await this.plugin.saveSettings();
-      applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
+      void this.plugin.saveSettings().then(() => {
+        applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
+      });
     });
   }
 

@@ -1,0 +1,23 @@
+title: "[Show & Tell]: "
+labels: ["show-and-tell"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share how you're using Vertical Timeline List! Interesting timeline layouts, workflows, integrations with other plugins, or anything else you'd like to show off.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What are you sharing?
+      description: A quick summary of what you've built or how you're using the plugin.
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Screenshots, example timeline markdown, settings, or step-by-step explanations welcome. Redact personal information.
+    validations:
+      required: false

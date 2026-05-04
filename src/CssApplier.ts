@@ -23,7 +23,7 @@ export type ColorSpace = (typeof ColorSpace)[keyof typeof ColorSpace];
 
 export function applyCssVariables(prefix: string, s: VerticalTimelineListSettings): void {
   const set = (name: string, value: string) => {
-    document.body.setCssProps({ [`--${prefix}-${name}`]: value });
+    activeDocument.body.setCssProps({ [`--${prefix}-${name}`]: value });
   };
   const px = (n: number) => `${n}px`;
   const themed = (c: ColorPair) =>
@@ -60,7 +60,7 @@ export function applyCssVariables(prefix: string, s: VerticalTimelineListSetting
 //#region Utilities
 
 function currentColorScheme(): Theme {
-  return document.querySelector(".theme-light") ? Theme.light : Theme.dark;
+  return activeDocument.querySelector(".theme-light") ? Theme.light : Theme.dark;
 }
 
 function returnColorSpaceValueFromHex(value: string, colorSpace: ColorSpace): string {

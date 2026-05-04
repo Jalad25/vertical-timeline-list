@@ -1,0 +1,31 @@
+title: "[Question]: "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question about how to use the plugin, or want to check whether something is supported before filing a bug or feature request? You're in the right place.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: What are you trying to do?
+      description: Describe your goal and what you've tried so far.
+    validations:
+      required: true
+
+  - type: textarea
+    id: setup
+    attributes:
+      label: Relevant setup
+      description: Plugin version, Obsidian version, OS, and any settings or timeline markdown that might be relevant. Redact personal information.
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, links, or anything else that might help.
+    validations:
+      required: false

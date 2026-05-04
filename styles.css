@@ -7,7 +7,7 @@ body {
   --vertical-timeline-list-line-margin-inline-start: 0px;
 
   /* Timeline Dot Styling */
-  --vertical-timeline-list-dot-right-padding: 20px; 
+  --vertical-timeline-list-dot-right-padding: 20px;
   --vertical-timeline-list-dot-size: 18px;
 
   /* Timeline Dot Children Styling */
@@ -34,7 +34,7 @@ body {
   > ul > li {
     border-left-width: var(--vertical-timeline-list-line-width);
     border-left-style: var(--vertical-timeline-list-line-style);
-    padding-inline: var(--vertical-timeline-list-line-padding);   
+    padding-inline: var(--vertical-timeline-list-line-padding);
     margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
     border-left-color: var(--vertical-timeline-list-line-color);
 
@@ -91,13 +91,6 @@ body {
 /* #endregion */
 
 /* #region Settings */
-
-.vertical-timeline-list-setting-section-header {
-  font-size: larger;
-  font-weight: bolder;
-  width: 100%;
-  border-bottom: 1px solid var(--background-modifier-border) !important;
-}
 
 .vertical-timeline-list-setting-tooltip {
   display: inline-block;

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument -- This module reads untyped JSON of unknown shape from prior plugin versions. Strict typing here would only obscure the runtime guards that actually protect against malformed input. */
+
 import { VerticalTimelineListSettings } from "./main";
 
 //#region Constants
@@ -68,7 +70,7 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
     "dotChildren-bottom-margin": "dotChildrenBottomMargin"
   };
 
-  for (const piece of Object.values(raw.timelineCSSDimensions ?? {}) as any[]) {
+  for (const piece of Object.values(raw.timelineCSSDimensions ?? {})) {
     if (!Array.isArray(piece)) continue;
     for (const entry of piece) {
       const key = dimMap[entry?.id];
@@ -88,7 +90,7 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
     "dotChildren-background-color": "dotChildrenBackgroundColor"
   };
 
-  for (const piece of Object.values(raw.timelineThemesCSSColors ?? {}) as any[]) {
+  for (const piece of Object.values(raw.timelineThemesCSSColors ?? {})) {
     if (!Array.isArray(piece)) continue;
     for (const entry of piece) {
       const key = colorMap[entry?.id];
@@ -101,7 +103,7 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
   const toggleMap: Record<string, keyof VerticalTimelineListSettings> = {
     "dot-collapsible": "dotCollapsible",
   };
-  for (const piece of Object.values(raw.timelineCSSToggles ?? {}) as any[]) {
+  for (const piece of Object.values(raw.timelineCSSToggles ?? {})) {
     if (!Array.isArray(piece)) continue;
     for (const entry of piece) {
       const key = toggleMap[entry?.id];
