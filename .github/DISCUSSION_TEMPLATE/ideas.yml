@@ -1,0 +1,31 @@
+title: "[Idea]: "
+labels: ["idea"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea you'd like to bounce around before turning it into a formal feature request? Share it here and see what others think.
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: The idea
+      description: A short description of what you're thinking about.
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why would this be useful?
+      description: What problem would it solve, or what use case does it enable?
+    validations:
+      required: false
+
+  - type: textarea
+    id: open-questions
+    attributes:
+      label: Open questions
+      description: Anything you're unsure about, or where you'd like input from others.
+    validations:
+      required: false
