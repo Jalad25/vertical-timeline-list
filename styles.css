@@ -7,11 +7,11 @@ body {
   --vertical-timeline-list-line-margin-inline-start: 0px;
 
   /* Timeline Dot Styling */
-  --vertical-timeline-list-dot-right-padding: 20px;
+  --vertical-timeline-list-dot-end-padding: 20px;
   --vertical-timeline-list-dot-size: 18px;
 
   /* Timeline Dot Children Styling */
-  --vertical-timeline-list-dotChildren-left-add-padding: 25px;
+  --vertical-timeline-list-dotChildren-start-add-padding: 25px;
 }
 
 /* Hides indentation guide only on timeline */
@@ -32,18 +32,18 @@ body {
 
   /* Timeline Bullets & Line */
   > ul > li {
-    border-left-width: var(--vertical-timeline-list-line-width);
-    border-left-style: var(--vertical-timeline-list-line-style);
+    border-inline-start-width: var(--vertical-timeline-list-line-width);
+    border-inline-start-style: var(--vertical-timeline-list-line-style);
     padding-inline: var(--vertical-timeline-list-line-padding);
     margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
-    border-left-color: var(--vertical-timeline-list-line-color);
+    border-inline-start-color: var(--vertical-timeline-list-line-color);
 
     &:not(:last-child) {
       padding-bottom: var(--vertical-timeline-list-dot-separation);
     }
 
     > span.list-bullet {
-      padding-right: var(--vertical-timeline-list-dot-right-padding);
+      padding-inline-end: var(--vertical-timeline-list-dot-end-padding);
 
       &:has(+ span.list-collapse-indicator) {
         &:after {
@@ -77,7 +77,8 @@ body {
     > ul > li {
       border-radius: 10px;
       margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
-      padding: var(--vertical-timeline-list-dotChildren-padding) var(--vertical-timeline-list-dotChildren-padding) var(--vertical-timeline-list-dotChildren-padding) calc(var(--vertical-timeline-list-dotChildren-left-add-padding) + var(--vertical-timeline-list-dotChildren-padding));
+      padding: var(--vertical-timeline-list-dotChildren-padding);
+      padding-inline-start: calc(var(--vertical-timeline-list-dotChildren-start-add-padding) + var(--vertical-timeline-list-dotChildren-padding));
       margin-top: var(--vertical-timeline-list-dotChildren-top-margin);
       background-color: var(--vertical-timeline-list-dotChildren-background-color);
 
@@ -99,7 +100,7 @@ body {
 .vertical-timeline-list-setting-tooltip-icon {
   display: inline-flex;
   vertical-align: middle;
-  margin-left: 5px;
+  margin-inline-start: 5px;
   cursor: help;
 }
 
