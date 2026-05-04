@@ -2,7 +2,11 @@
   <img src="assets/PluginBanner.png" alt="Vertical Timeline List" align="center" width=800>
 </p>
 
-![GitHub release](https://img.shields.io/github/v/release/Jalad25/vertical-timeline-list) ![Obsidian plugin](https://img.shields.io/endpoint?url=https%3A%2F%2Fscambier.xyz%2Fobsidian-endpoints%2Fvertical-timeline-list.json) ![Assets downloaded](https://img.shields.io/github/downloads/Jalad25/vertical-timeline-list/total)
+<p align="center">
+  <img src="https://img.shields.io/github/v/release/Jalad25/vertical-timeline-list" alt="GitHub release">
+  <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fscambier.xyz%2Fobsidian-endpoints%2Fvertical-timeline-list.json" alt="Obsidian plugin">
+  <img src="https://img.shields.io/github/downloads/Jalad25/vertical-timeline-list/total" alt="Assets downloaded">
+</p>
 
 # Vertical Timeline List
 
