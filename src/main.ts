@@ -72,7 +72,6 @@ export default class VerticalTimelineListPlugin extends Plugin {
   }
 
   async loadSettings() {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- Disabling eslint as this is an issue triggered by Obsidian's API. Triggers locally
     const raw = await this.loadData();
     const { values, migrated } = migrate(raw);
     this.settings = Object.assign({}, DEFAULT_SETTINGS, values);
