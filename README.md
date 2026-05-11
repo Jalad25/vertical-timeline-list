@@ -16,10 +16,10 @@ An [Obsidian](https://obsidian.md/) plugin that utilizes task lists to create a 
 
 ## Features
 
-- **Timeline Rendering**: Any task list whose parent task has a `t` status (e.g. `- [t]`) is rendered as a vertical timeline in Reading View.
-- **Customizable Spacing**: Adjust dot separation, line padding, and detail block spacing from the settings tab.
-- **Theme-aware Colors**: Independent light- and dark-mode color values for the line, dots, hover state, and detail backgrounds. The active set switches automatically when Obsidian's theme changes.
-- **Collapsible Dots**: Toggle whether timeline entries with details can be collapsed and expanded.
+- **Timeline Rendering** — Any task list whose parent task has a `t` status (e.g. `- [t]`) is rendered as a vertical timeline in Reading View.
+- **Customizable Spacing** — Adjust dot separation, line padding, and detail block spacing from the settings tab.
+- **Theme-aware Colors** — Independent light- and dark-mode color values for the line, dots, hover state, and detail backgrounds. The active set switches automatically when Obsidian's theme changes.
+- **Collapsible Dots** — Toggle whether timeline entries with details can be collapsed and expanded.
 
 ## Installation
 
@@ -29,6 +29,18 @@ An [Obsidian](https://obsidian.md/) plugin that utilizes task lists to create a 
 2. If restricted mode is on, click **Turn on community plugins**.
 3. Click **Browse** and search for **Vertical Timeline List**.
 4. Click **Install**, then **Enable**.
+
+### BRAT
+
+BRAT installs plugins directly from their GitHub repository and auto-updates them on each release.
+
+1. Install **BRAT** from **Settings → Community plugins → Browse** and enable it.
+2. Open the command palette (`Ctrl+P` (Windows) or `Command+P` (macOS)) and run **BRAT: Add a beta plugin for testing**.
+3. Enter the repository URL: `https://github.com/Jalad25/vertical-timeline-list`.
+4. Choose whether to track the latest release or the latest commit, then select **Add Plugin**.
+5. Open **Settings → Community plugins** and enable **Contact Note**.
+
+To get future updates, run **BRAT: Check for updates to all beta plugins** from the command palette, or enable auto-update in BRAT's settings.
 
 ### Manual
 

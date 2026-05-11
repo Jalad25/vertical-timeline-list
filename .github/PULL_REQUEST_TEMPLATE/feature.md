@@ -40,5 +40,6 @@ Closes #
 - [ ] `npm run build` passes with no TypeScript errors.
 - [ ] I have tested with existing timelines to confirm no regression.
 - [ ] I have verified the feature renders correctly in both light and dark mode (if it adds or modifies UI).
+- [ ] I have tested the feature on both the Obsidian desktop application and the Obsidian mobile app (if relevant).
 - [ ] I have updated the README to document the new feature (if relevant).
 - [ ] Settings persist correctly across reloads (if settings were changed).

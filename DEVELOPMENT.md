@@ -5,7 +5,6 @@ This document outlines how to set up a local development environment and the int
 ## Prerequisites
 
 - **[Node.js](https://nodejs.org/)**: v22 or later recommended
-- **[npm](https://www.npmjs.com/)**: bundled with Node.js
 - **[Git](https://git-scm.com/)**: latest version
 - **[Obsidian](https://obsidian.md/)**: 1.10.6 or later, plus a local vault for testing. Older versions will not load the plugin.
 
@@ -88,18 +87,21 @@ vertical-timeline-list/
 └── eslint.config.mjs                     # ESLint config
 ```
 
-## Settings Schema Migrations
+## Schema Migrations
 
 Plugin settings are versioned through [`SchemaMigration.ts`](src/SchemaMigration.ts). The `schemaVersion` field on `VerticalTimelineListSettings` records the version of the data on disk, and `CURRENT_SCHEMA_VERSION` records the version the running code expects.
 
 On every plugin load, `loadSettings()` runs the user's saved data through `migrate(...)`, which steps the data forward one version at a time using the entries in the `MIGRATIONS` array. If anything was migrated, the upgraded settings are written back to disk so the user only pays the migration cost once.
+
+> [!IMPORTANT]
+> Adding or removing a field that doesn't conflict with existing data does **not** require a migration. `loadSettings()` merges saved data over `DEFAULT_SETTINGS` (so new fields get their default) and drops keys that aren't in `DEFAULT_SETTINGS` (so removed fields disappear from `data.json` on the next save). A migration is only needed when an existing field needs to be renamed, restructured, or replaced with a non-default value.
 
 ### Adding a new migration
 
 When a settings change would break existing user data (renamed field, restructured value, removed field with a non-default replacement, etc.):
 
 1. **Bump `CURRENT_SCHEMA_VERSION`** in [`SchemaMigration.ts`](src/SchemaMigration.ts) by one.
-2. **Add a step function** named `migrate_N_to_N+1(raw)` under the *Migration Step Functions* region. It receives the previous-version shape as `any` and returns `Partial<VerticalTimelineListSettings> & { schemaVersion: N+1 }`.
+2. **Add a step function** named `migrate_N_to_N+1(raw)` under the *Migration Step Functions* region of [`SchemaMigration.ts`](src/SchemaMigrations.ts). It receives the previous-version shape as `any` and returns `Partial<VerticalTimelineListSettings> & { schemaVersion: N+1 }`.
 3. **Register it** by adding `{ from: N, to: N+1, apply: migrate_N_to_N+1 }` to the `MIGRATIONS` array.
 4. **Update `VerticalTimelineListSettings` and `DEFAULT_SETTINGS`** in [`main.ts`](src/main.ts) to reflect the new shape.
 
@@ -110,12 +112,13 @@ When a settings change would break existing user data (renamed field, restructur
 
 Currently, the project relies on manual testing within an Obsidian vault. When making changes, please verify:
 
-- The plugin loads without errors (check the developer console with `Ctrl+Shift+I` / `Cmd+Option+I`).
+- The plugin loads without errors (check the developer console with `Ctrl+Shift+I` (Windows) or `Command+Option+I` (macOS)).
 - Settings persist across reloads.
 - Editing a setting (dimension, color, or toggle) updates the timeline immediately without requiring a reload.
 - Switching Obsidian's theme between light and dark applies the corresponding color set without a reload.
 - A task list with `- [t]` as the parent renders as a vertical timeline in **Reading View**, and entries with nested children show details (and collapse/expand correctly when the **Dot collapsible** setting is on).
 - Loading a `data.json` from a previous schema version triggers migration on first start, after which the file is rewritten in the current shape with `schemaVersion` stamped.
+- The plugin renders and functions correctly in **both desktop and mobile**. All bugs, features, and UI changes should be verified against both before submission.
 - The plugin renders correctly in **both light and dark mode**. All bugs, features, and UI changes should be verified against both themes before submission.
 
 ## Submitting Changes

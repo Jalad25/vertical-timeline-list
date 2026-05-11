@@ -22,7 +22,8 @@
 
 - [ ] I have read the [contributing guidelines](../../CONTRIBUTING.md).
 - [ ] No source code under `src/` has been changed in this PR.
+- [ ] No changes have been made to `styles.css`.
 - [ ] Internal links and anchors still resolve correctly.
 - [ ] Code blocks render correctly (language tags, indentation).
-- [ ] Screenshots, if any, are placed under `screenshots/` and referenced with relative paths.
+- [ ] Screenshots, if any, are placed under `assets/screenshots/` and referenced with relative paths.
 - [ ] Spelling and grammar have been reviewed.

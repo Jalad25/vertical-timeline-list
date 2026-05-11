@@ -16,6 +16,7 @@ Before opening a new bug report:
 - Make sure you are running the latest version of the plugin and the minimum required version of Obsidian.
 - Try to reproduce the bug in a clean vault with other plugins disabled or removed.
 - Try to reproduce the bug in **both light and dark mode**, since some issues are theme-specific.
+- Try to reproduce the bug in the **Obsidian desktop application and the Obsidian mobile app**, since some issues are device-specific.
 
 ## Suggesting Enhancements
 
@@ -40,6 +41,7 @@ For usage questions, configuration help, or sharing how you use the plugin, plea
 1. **Fork** the repository and create your branch from `master`.
 2. **Follow the development setup** in [DEVELOPMENT.md](DEVELOPMENT.md).
 3. **Make your changes** in a clear, focused commit history.
+4. **Add a schema migration** if your change alters the on-disk shape of `VerticalTimelineListSettings` (renamed/removed fields, restructured values). See [Schema Migrations](DEVELOPMENT.md#schema-migrations).
 4. **Lint your code** by running `npm run lint`.
 5. **Build the project** with `npm run build` to ensure there are no TypeScript errors.
 6. **Test your changes** in a local Obsidian vault.

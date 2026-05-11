@@ -12,6 +12,7 @@ export default [
     rules: {
       "no-prototype-builtins": "off",
       "no-case-declarations": "off",
+			"@typescript-eslint/no-unsafe-assignment": "off"
     },
   },
 ];
