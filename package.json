@@ -13,10 +13,9 @@
   "license": "GNU AGPLv3",
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "builtin-modules": "3.3.0",
-    "esbuild": "0.21.5",
+    "esbuild": "0.28.0",
     "eslint": "^10.2.1",
-    "eslint-plugin-obsidianmd": "^0.2.9",
+    "eslint-plugin-obsidianmd": "^0.3.0",
     "obsidian": "latest",
     "tslib": "2.6.3",
     "typescript": "5.5.4"
