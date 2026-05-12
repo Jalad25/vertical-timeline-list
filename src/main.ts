@@ -101,7 +101,7 @@ export default class VerticalTimelineListPlugin extends Plugin {
   }
 
   async loadSettings() {
-    const raw = await this.loadData();
+    const raw: unknown = await this.loadData();
     const { values, migrated } = migrate(raw);
     this.settings = Object.assign({}, DEFAULT_SETTINGS, values);
     if (migrated) await this.saveSettings();
