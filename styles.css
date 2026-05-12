@@ -15,19 +15,19 @@ body {
 }
 
 /* Hides indentation guide only on timeline */
-.show-indentation-guide .el-ul ul li[data-task="t"] ul::before {
-  border-inline-end: none !important;
+.show-indentation-guide li.vertical-timeline-list ul::before {
+  border-inline-end: none;
 }
 
 /* Timeline */
-.el-ul ul li[data-task="t"] {
+li.vertical-timeline-list {
   margin-inline-start: var(--vertical-timeline-list-line-margin-inline-start);
 
   /* Hide Timeline Parent Task */
   > input[type="checkbox"],
   > p input[type="checkbox"],
   > span.list-collapse-indicator {
-    display: none !important;
+    display: none;
   }
 
   /* Timeline Bullets & Line */
@@ -44,34 +44,34 @@ body {
 
     > span.list-bullet {
       padding-inline-end: var(--vertical-timeline-list-dot-end-padding);
+			&:after {
+				width: var(--vertical-timeline-list-dot-size);
+				height: var(--vertical-timeline-list-dot-size);
+			}
 
-      &:has(+ span.list-collapse-indicator) {
-        &:after {
-          background-color: var(--vertical-timeline-list-dot-collapsible-color);
-        }
-      }
+			&:not(.vertical-timeline-list-collapsible-bullet) {
+				&:after {
+					background-color: var(--vertical-timeline-list-dot-color);
+					color: var(--vertical-timeline-list-dot-color);
+				}
+			}
 
-      &:has(+ span.list-collapse-indicator:hover) {
-        &:after {
-          box-shadow: 0 0 0 4px var(--vertical-timeline-list-dot-collapsible-shadow-color);
-        }
-      }
+			&.vertical-timeline-list-collapsible-bullet {
+				&:after {
+					background-color: var(--vertical-timeline-list-dot-collapsible-color);
+				}
 
-      &:after {
-        width: var(--vertical-timeline-list-dot-size);
-        height: var(--vertical-timeline-list-dot-size);
-        background-color: var(--vertical-timeline-list-dot-color);
-        color: var(--vertical-timeline-list-dot-color);
-      }
+				&:hover {
+					&:after {
+						box-shadow: 0 0 0 4px var(--vertical-timeline-list-dot-collapsible-shadow-color);
+					}
+				}
+			}
     }
 
     > span.list-collapse-indicator {
       display: var(--vertical-timeline-list-dot-collapsible-display);  /* Allow Collapsing */
       cursor: var(--vertical-timeline-list-dot-collapsible-cursor); /* Allow Collapsing */
-
-      svg {
-        color: transparent !important;
-      }
     }
 
     > ul > li {
@@ -86,6 +86,11 @@ body {
         margin-bottom: var(--vertical-timeline-list-dotChildren-bottom-margin);
       }
     }
+
+		.vertical-timeline-list-collapse-disabled {
+			pointer-events: none;
+			cursor: not-allowed;
+		}
   }
 }
 
@@ -107,8 +112,8 @@ body {
 .vertical-timeline-list-setting-tooltip-image {
   visibility: hidden;
   width: 500px;
-  background-color: #555;
-  color: #fff;
+  background-color: #555555;
+  color: #ffffff;
   text-align: center;
   border-radius: 6px;
   padding: 5px;
@@ -130,7 +135,7 @@ body {
   margin: 0.75em 0;
 
   th, td {
-    border: none !important;
+    border: none;
     padding: 0.5em 0.75em;
     vertical-align: middle;
   }
@@ -140,11 +145,11 @@ body {
     font-weight: 600;
     color: var(--text-muted);
     font-size: var(--font-ui-smaller);
-    border-bottom: 1px solid var(--background-modifier-border) !important;
+    border-bottom: 1px solid var(--background-modifier-border);
   }
 
   tbody tr + tr td {
-    border-top: 1px solid var(--background-modifier-border) !important;
+    border-top: 1px solid var(--background-modifier-border);
   }
 
   .vertical-timeline-list-setting-table-label {

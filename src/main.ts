@@ -68,6 +68,35 @@ export default class VerticalTimelineListPlugin extends Plugin {
       })
     );
 
+    this.registerMarkdownPostProcessor((el) => {
+			// Find vertical timeline list
+      el.querySelectorAll('li[data-task="t"]').forEach((parent) => {
+        parent.addClass("vertical-timeline-list");
+
+				// Find vertical timeline bullets that are collapsible
+				parent.querySelectorAll(
+					":scope > ul.has-list-bullet > li > span.list-collapse-indicator.collapse-indicator.collapse-icon"
+				).forEach((indicator) => {
+					const bullet = indicator.previousElementSibling;
+					if (bullet?.matches("span.list-bullet")) {
+						bullet.addClass("vertical-timeline-list-collapsible-bullet");
+					}
+				});
+
+				// Remove collapse icons within timeline
+				parent.querySelectorAll(
+						":scope > ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon > svg"
+					).forEach((svg) => {
+						svg.remove();
+					});
+
+				// Remove ability to collapse any children within timeline bullets
+				parent.querySelectorAll(":scope > ul.has-list-bullet li ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon").forEach((span) => {
+					span.addClass("vertical-timeline-list-collapse-disabled");
+        });
+      });
+    });
+
     this.addSettingTab(new VerticalTimelineListSettingTab(this.app, this));
   }
 
