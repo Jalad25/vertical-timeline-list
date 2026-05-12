@@ -98,37 +98,6 @@ li.vertical-timeline-list {
 
 /* #region Settings */
 
-.vertical-timeline-list-setting-tooltip {
-  display: inline-block;
-}
-
-.vertical-timeline-list-setting-tooltip-icon {
-  display: inline-flex;
-  vertical-align: middle;
-  margin-inline-start: 5px;
-  cursor: help;
-}
-
-.vertical-timeline-list-setting-tooltip-image {
-  visibility: hidden;
-  width: 500px;
-  background-color: #555555;
-  color: #ffffff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 5px;
-  position: fixed;
-  z-index: 1000;
-  opacity: 0;
-  transition: opacity 0.3s;
-  pointer-events: none;
-}
-
-.vertical-timeline-list-setting-tooltip.is-visible .vertical-timeline-list-setting-tooltip-image {
-  visibility: visible;
-  opacity: 1;
-}
-
 .vertical-timeline-list-setting-table {
   width: 100%;
   border-collapse: collapse;

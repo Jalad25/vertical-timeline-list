@@ -2,25 +2,9 @@ import {
   App,
   PluginSettingTab,
   Setting,
-  setIcon
 } from "obsidian";
 import VerticalTimelineListPlugin, { ColorPair, VerticalTimelineListSettings } from "./main";
 import { applyCssVariables } from "./CssApplier";
-
-//#region Images
-
-import CollapsibleDot from "../assets/screenshots/CollapsibleDot.png";
-import CollapsingDot from "../assets/screenshots/CollapsingDot.gif";
-import Dot from "../assets/screenshots/Dot.png";
-import DotDescription from "../assets/screenshots/DotDescription.png";
-import Line from "../assets/screenshots/Line.png";
-import LinePadding from "../assets/screenshots/LinePadding.png";
-import DotSeparation from "../assets/screenshots/DotSeparation.png";
-import DotDetailPadding from "../assets/screenshots/DotDetailPadding.png";
-import DotDetailTopSeparation from "../assets/screenshots/DotDetailTopSeparation.png";
-import DotDetailBottomSeparation from "../assets/screenshots/DotDetailBottomSeparation.png";
-
-//#endregion
 
 //#region Types
 
@@ -56,11 +40,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setDesc("All units in px")
       .setHeading();
 
-    this.dimensionSetting(containerEl, "Dot separation", "Gap between dots on line", DotSeparation, "dotSeparation");
-    this.dimensionSetting(containerEl, "Line padding", "Line left and right padding", LinePadding, "linePadding");
-    this.dimensionSetting(containerEl, "Dot details padding", "Details top, bottom, left, and right padding", DotDetailPadding, "dotChildrenPadding");
-    this.dimensionSetting(containerEl, "Dot details top separation", "", DotDetailTopSeparation, "dotChildrenTopMargin");
-    this.dimensionSetting(containerEl, "Dot details bottom separation", "", DotDetailBottomSeparation, "dotChildrenBottomMargin");
+    this.dimensionSetting(containerEl, "Dot separation", "Gap between dots on line", "dotSeparation");
+    this.dimensionSetting(containerEl, "Line padding", "Line left and right padding", "linePadding");
+    this.dimensionSetting(containerEl, "Dot details padding", "Details top, bottom, left, and right padding", "dotChildrenPadding");
+    this.dimensionSetting(containerEl, "Dot details top separation", "", "dotChildrenTopMargin");
+    this.dimensionSetting(containerEl, "Dot details bottom separation", "", "dotChildrenBottomMargin");
 
     // Theme
     new Setting(containerEl)
@@ -69,11 +53,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setHeading();
 
     this.renderColorTable(containerEl, [
-      { key: "dotColor", name: "Dot color", desc: "Dots without details", img: Dot },
-      { key: "dotCollapsibleColor", name: "Dot collapsible color", desc: "Dots with details", img: CollapsibleDot },
-      { key: "dotCollapsibleShadowColor", name: "Dot collapsible hover color", desc: "Only visible when collapsible option is on", img: CollapsibleDot },
-      { key: "lineColor", name: "Line color", desc: "", img: Line },
-      { key: "dotChildrenBackgroundColor", name: "Dot details background color", desc: "", img: DotDescription },
+      { key: "dotColor", name: "Dot color", desc: "Dots without details" },
+      { key: "dotCollapsibleColor", name: "Dot collapsible color", desc: "Dots with details" },
+      { key: "dotCollapsibleShadowColor", name: "Dot collapsible hover color", desc: "Only visible when collapsible option is on" },
+      { key: "lineColor", name: "Line color", desc: "" },
+      { key: "dotChildrenBackgroundColor", name: "Dot details background color", desc: "" },
     ]);
 
     // Behavior
@@ -82,11 +66,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setName("Behavior")
       .setHeading();
 
-    this.toggleSetting(containerEl, "Dot collapsible", "Dots with details can be collapsed", CollapsingDot, "dotCollapsible");
+    this.toggleSetting(containerEl, "Dot collapsible", "Dots with details can be collapsed", "dotCollapsible");
   }
 
-  private dimensionSetting(el: HTMLElement, name: string, desc: string, img: string, key: NumberKey): void {
-    const setting = new Setting(el)
+  private dimensionSetting(el: HTMLElement, name: string, desc: string, key: NumberKey): void {
+    new Setting(el)
       .setName(name)
       .setDesc(desc)
       .addText((t) =>
@@ -99,11 +83,10 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
             applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
           })
       );
-    this.addTooltipImage(setting.nameEl, img);
   }
 
-  private toggleSetting(el: HTMLElement, name: string, desc: string, img: string, key: BooleanKey): void {
-    const setting = new Setting(el)
+  private toggleSetting(el: HTMLElement, name: string, desc: string, key: BooleanKey): void {
+    new Setting(el)
       .setName(name)
       .setDesc(desc)
       .addToggle((t) =>
@@ -114,12 +97,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
             applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
           })
       );
-    this.addTooltipImage(setting.nameEl, img);
   }
 
   private renderColorTable(
     containerEl: HTMLElement,
-    rows: { key: ColorKey; name: string; desc: string; img: string }[],
+    rows: { key: ColorKey; name: string; desc: string }[],
   ): void {
     const table = containerEl.createEl("table", {
       cls: `${this.plugin.manifest.id}-setting-table`,
@@ -136,8 +118,7 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       const tr = tbody.createEl("tr");
 
       const labelCell = tr.createEl("td", { cls: `${this.plugin.manifest.id}-setting-table-label` });
-      const nameEl = labelCell.createDiv({ text: row.name, cls: `${this.plugin.manifest.id}-setting-table-name` });
-      this.addTooltipImage(nameEl, row.img);
+      labelCell.createDiv({ text: row.name, cls: `${this.plugin.manifest.id}-setting-table-name` });
       if (row.desc) {
         labelCell.createDiv({ text: row.desc, cls: `${this.plugin.manifest.id}-setting-table-desc` });
       }
@@ -156,34 +137,6 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
         applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
       });
     });
-  }
-
-  private addTooltipImage(anchorEl: HTMLElement, img: string): void {
-    if (!img) return;
-    const tooltip = anchorEl.createDiv({ cls: `${this.plugin.manifest.id}-setting-tooltip` });
-    const icon = tooltip.createDiv({ cls: `${this.plugin.manifest.id}-setting-tooltip-icon` });
-    setIcon(icon, "info");
-    const image = tooltip.createEl("img", {
-      cls: `${this.plugin.manifest.id}-setting-tooltip-image`,
-      attr: { src: img },
-    });
-
-    const showAt = (e: MouseEvent) => {
-      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      const gap = 8;
-      let left = rect.right + gap;
-      const imgWidth = image.offsetWidth || 500;
-      if (left + imgWidth > window.innerWidth) {
-        left = Math.max(0, rect.left - imgWidth - gap);
-      }
-      image.style.left = `${left}px`;
-      image.style.top = `${rect.top}px`;
-      tooltip.classList.add("is-visible");
-    };
-    const hide = () => tooltip.classList.remove("is-visible");
-
-    icon.addEventListener("mouseenter", showAt);
-    icon.addEventListener("mouseleave", hide);
   }
 }
 

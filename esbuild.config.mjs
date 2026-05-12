@@ -28,11 +28,7 @@ const context = await esbuild.context({
   logLevel: "info",
   sourcemap: prod ? false : "inline",
   treeShaking: true,
-  outfile: "main.js",
-  loader: {
-    ".png": "dataurl",
-    ".gif": "dataurl",
-  },
+  outfile: "main.js"
 });
 
 if (prod) {
