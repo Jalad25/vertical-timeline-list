@@ -1,6 +1,6 @@
 {
   "name": "vertical-timeline-list",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Utilizes task lists to create a timeline... or something resembling a timeline.",
   "main": "main.js",
   "scripts": {
