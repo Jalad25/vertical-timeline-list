@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/github/v/release/Jalad25/vertical-timeline-list" alt="GitHub release">
   <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fscambier.xyz%2Fobsidian-endpoints%2Fvertical-timeline-list.json" alt="Obsidian plugin">
   <img src="https://img.shields.io/github/downloads/Jalad25/vertical-timeline-list/total" alt="Assets downloaded">
-	<img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.obsidianpluginaudit.com%2Fbadge%2Fvertical-timeline-list%2Flatest.json%3Fversion%3D3.0.2&cacheSeconds=60">
+	<a href="https://obsidianpluginaudit.com/audit/vertical-timeline-list/latest"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.obsidianpluginaudit.com%2Fbadge%2Fvertical-timeline-list%2Flatest.json%3Fversion%3D3.0.2&cacheSeconds=60"></a>
 </p>
 
 # Vertical Timeline List
