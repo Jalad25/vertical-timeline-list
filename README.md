@@ -11,6 +11,7 @@
   <a href="https://github.com/jalad25/vertical-timeline-list/releases"><img src="https://img.shields.io/github/downloads/Jalad25/vertical-timeline-list/total?label=Assets%20Downloaded&logo=Github" alt="Assets downloaded"></a>
 </p>
 <p align="center">
+	<a href="https://community.obsidian.md/plugins/vertical-timeline-lisst"><img alt="Obsidian Scorecard" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/Jalad25/vertical-timeline-list/badges/vertical-timeline-list.json"></a>
 	<a href="https://obsidianpluginaudit.com/audit/vertical-timeline-list/latest"><img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapi.obsidianpluginaudit.com%2Fbadge%2Fvertical-timeline-list%2Flatest.json&cacheSeconds=60&label=3rd%20Party%20Obsidian%20Plugin%20Audit"></a>
 </p>
 
