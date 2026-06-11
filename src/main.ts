@@ -69,31 +69,35 @@ export default class VerticalTimelineListPlugin extends Plugin {
     );
 
     this.registerMarkdownPostProcessor((el) => {
-			// Find vertical timeline list
-      el.querySelectorAll('li[data-task="t"]').forEach((parent) => {
-        parent.addClass("vertical-timeline-list");
+			// Do initial mutation of timeline elements
+      mutateTimelineElements(el);
 
-				// Find vertical timeline bullets that are collapsible
-				parent.querySelectorAll(
-					":scope > ul.has-list-bullet > li > span.list-collapse-indicator.collapse-indicator.collapse-icon"
-				).forEach((indicator) => {
-					const bullet = indicator.previousElementSibling;
-					if (bullet?.matches("span.list-bullet")) {
-						bullet.addClass("vertical-timeline-list-collapsible-bullet");
-					}
-				});
-
-				// Remove collapse icons within timeline
-				parent.querySelectorAll(
-						":scope > ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon > svg"
-					).forEach((svg) => {
-						svg.remove();
-					});
-
-				// Remove ability to collapse any children within timeline bullets
-				parent.querySelectorAll(":scope > ul.has-list-bullet li ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon").forEach((span) => {
-					span.addClass("vertical-timeline-list-collapse-disabled");
+			// Create observer to trigger on newly added nodes
+			// Re-run mutation on added nodes injected by other plugins
+			// Fix specifically for Tasks plugin to work properly with this plugin
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((m) => {
+          m.addedNodes.forEach((node) => {
+            if (!(node instanceof HTMLElement)) return;
+            if (node.matches('li[data-task="t"]') || node.querySelector('li[data-task="t"]')) {
+              mutateTimelineElements(node);
+            }
+          });
         });
+      });
+      observer.observe(el, { childList: true, subtree: true });
+
+			// Remove observer once finished
+      const detachObserver = new MutationObserver(() => {
+        if (!el.isConnected) {
+          observer.disconnect();
+          detachObserver.disconnect();
+        }
+      });
+      detachObserver.observe(document.body, { childList: true, subtree: true });
+      this.register(() => {
+        observer.disconnect();
+        detachObserver.disconnect();
       });
     });
 
@@ -111,3 +115,41 @@ export default class VerticalTimelineListPlugin extends Plugin {
     await this.saveData(this.settings);
   }
 }
+
+//#region Utilitis
+
+function mutateTimelineElements(root: ParentNode): void {
+  const timelineCandidates: Element[] = Array.from(
+    root.querySelectorAll('li[data-task="t"]:not(.vertical-timeline-list)')
+  );
+
+	// If root is candidate, add to list
+  if (root instanceof Element
+      && root.matches('li[data-task="t"]:not(.vertical-timeline-list)')) timelineCandidates.unshift(root);
+
+	// Add classes to candidates
+  timelineCandidates.forEach((parent) => {
+		// Add class to vertical timeline list parent
+    parent.addClass("vertical-timeline-list");
+
+		// Find vertical timeline bullets that are collapsible
+    parent.querySelectorAll(":scope > ul.has-list-bullet > li > span.list-collapse-indicator.collapse-indicator.collapse-icon").forEach((indicator) => {
+      const bullet = indicator.previousElementSibling;
+      if (bullet?.matches("span.list-bullet")) {
+        bullet.addClass("vertical-timeline-list-collapsible-bullet");
+      }
+    });
+
+		// Remove collapse icons within timeline
+    parent.querySelectorAll(":scope > ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon > svg").forEach((svg) => {
+      svg.remove();
+    });
+
+		// Remove ability to collapse any children within timeline bullets
+    parent.querySelectorAll(":scope > ul.has-list-bullet li ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon").forEach((span) => {
+      span.addClass("vertical-timeline-list-collapse-disabled");
+    });
+  });
+}
+
+//#endregion
