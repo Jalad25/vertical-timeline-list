@@ -78,7 +78,7 @@ export default class VerticalTimelineListPlugin extends Plugin {
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((m) => {
           m.addedNodes.forEach((node) => {
-            if (!(node instanceof HTMLElement)) return;
+            if (!node.instanceOf(HTMLElement)) return;
             if (node.matches('li[data-task="t"]') || node.querySelector('li[data-task="t"]')) {
               mutateTimelineElements(node);
             }
@@ -94,7 +94,7 @@ export default class VerticalTimelineListPlugin extends Plugin {
           detachObserver.disconnect();
         }
       });
-      detachObserver.observe(document.body, { childList: true, subtree: true });
+      detachObserver.observe(el.ownerDocument.body, { childList: true, subtree: true });
       this.register(() => {
         observer.disconnect();
         detachObserver.disconnect();
@@ -124,7 +124,7 @@ function mutateTimelineElements(root: ParentNode): void {
   );
 
 	// If root is candidate, add to list
-  if (root instanceof Element
+  if (root.instanceOf(Element)
       && root.matches('li[data-task="t"]:not(.vertical-timeline-list)')) timelineCandidates.unshift(root);
 
 	// Add classes to candidates
