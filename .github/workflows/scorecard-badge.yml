@@ -32,11 +32,9 @@ jobs:
 
           health = re.search(r'Health</span><span[^>]*>([^<]+)</span>', html)
           review = re.search(r'Review</span><span[^>]*>([^<]+)</span>', html)
-          pct    = re.search(r'tabular-nums"[^>]*>(\d{1,3})(?:<!--[^>]*-->)?%', html)
 
           health_v = health.group(1).strip() if health else "unknown"
           review_v = review.group(1).strip() if review else "unknown"
-          pct_v    = pct.group(1) if pct else "?"
 
           color = {
               "Excellent": "brightgreen",
@@ -49,7 +47,7 @@ jobs:
           badge = {
               "schemaVersion": 1,
               "label": "Obsidian Scorecard",
-              "message": f"{pct_v}% • {health_v} • {review_v}",
+              "message": f"{health_v} • {review_v}",
               "color": color,
               "namedLogo": "obsidian",
           }
