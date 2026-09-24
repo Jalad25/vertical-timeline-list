@@ -79,6 +79,23 @@ renders as:
 > [!IMPORTANT]
 > Add a space after the `[t]`. Without it, Obsidian does not recognize the line as a task and the timeline will not render.
 
+### Details CSS Style Overrides
+Any detail item can override its own CSS by starting with an inline code block by adding `STYLE[...]` at the beginning of the detail. This is useful when you want a single entry to stand out without changing the default colors.
+
+Syntax:
+
+```
+# Example
+- [t]
+  - 2020
+    - `STYLE[background-color:#7A3FB2CC;color:white]`Detail with a custom background
+    - Regular detail, unchanged
+  - 2021
+  - 2022
+```
+
+The inline code block with the style overrides should always be the first inline code block within the details. Declarations follow standard CSS syntax of `property:value`, separated by `;`. Multiple CSS properties can be added as long as it is valid CSS.
+
 ## Settings Reference
 
 ### Spacing

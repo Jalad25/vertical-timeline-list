@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-assignment -- This module reads untyped JSON of unknown shape from prior plugin versions. Strict typing here would only obscure the runtime guards that actually protect against malformed input. */
-
 import { VerticalTimelineListSettings } from "./main";
 
 //#region Constants
@@ -17,7 +15,7 @@ const MIGRATIONS: Migration[] = [
 type Migration = {
   from: number;
   to: number;
-  apply: (raw: any) => Partial<VerticalTimelineListSettings> & { schemaVersion: number };
+  apply: (raw: Record<string, unknown>) => Partial<VerticalTimelineListSettings> & { schemaVersion: number };
 };
 
 export type MigrationResult = {
@@ -30,11 +28,11 @@ export type MigrationResult = {
 //#region Migration
 
 export function migrate(raw: unknown): MigrationResult {
-  if (!raw || typeof raw !== "object") {
+  if (!isRecord(raw)) {
     return { values: { schemaVersion: CURRENT_SCHEMA_VERSION }, migrated: true };
   }
 
-  let current: any = raw;
+  let current: Record<string, unknown> = raw;
   let version: number = typeof current.schemaVersion === "number" ? current.schemaVersion : 0;
 
   let migrated = false;
@@ -47,7 +45,7 @@ export function migrate(raw: unknown): MigrationResult {
   }
 
   return {
-    values: current as Partial<VerticalTimelineListSettings>,
+    values: current,
     migrated
   };
 }
@@ -57,7 +55,7 @@ export function migrate(raw: unknown): MigrationResult {
 /* This is a per-version migration steps. Append new functions below for each schema
    change and add it to MIGRATIONS. Never edit existing steps. */
 
-function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { schemaVersion: 1 } {
+function migrate_0_to_1(raw: Record<string, unknown>): Partial<VerticalTimelineListSettings> & { schemaVersion: 1 } {
   const out: Partial<VerticalTimelineListSettings> & { schemaVersion: 1 } = {
     schemaVersion: 1,
   };
@@ -70,13 +68,18 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
     "dotChildren-bottom-margin": "dotChildrenBottomMargin"
   };
 
-  for (const piece of Object.values(raw.timelineCSSDimensions ?? {})) {
-    if (!Array.isArray(piece)) continue;
-    for (const entry of piece) {
-      const key = dimMap[entry?.id];
-      if (key && typeof entry.value === "string") {
-        const n = parseInt(entry.value, 10);
-        if (!Number.isNaN(n)) (out as any)[key] = n;
+  const dimensions = raw.timelineCSSDimensions;
+  if (isRecord(dimensions)) {
+    for (const piece of Object.values(dimensions)) {
+      if (!Array.isArray(piece)) continue;
+      for (const entry of piece) {
+        if (!isRecord(entry)) continue;
+        const id = typeof entry.id === "string" ? entry.id : undefined;
+        const key = id ? dimMap[id] : undefined;
+        if (key && typeof entry.value === "string") {
+          const n = parseInt(entry.value, 10);
+          if (!Number.isNaN(n)) (out as Record<string, unknown>)[key] = n;
+        }
       }
     }
   }
@@ -90,12 +93,19 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
     "dotChildren-background-color": "dotChildrenBackgroundColor"
   };
 
-  for (const piece of Object.values(raw.timelineThemesCSSColors ?? {})) {
-    if (!Array.isArray(piece)) continue;
-    for (const entry of piece) {
-      const key = colorMap[entry?.id];
-      if (key && entry?.[0]?.value && entry?.[1]?.value) {
-        (out as any)[key] = { dark: entry[0].value, light: entry[1].value };
+  const colors = raw.timelineThemesCSSColors;
+  if (isRecord(colors)) {
+    for (const piece of Object.values(colors)) {
+      if (!Array.isArray(piece)) continue;
+      for (const entry of piece) {
+        if (!isRecord(entry)) continue;
+        const id = typeof entry.id === "string" ? entry.id : undefined;
+        const key = id ? colorMap[id] : undefined;
+        const dark = isRecord(entry[0]) && typeof entry[0].value === "string" ? entry[0].value : undefined;
+        const light = isRecord(entry[1]) && typeof entry[1].value === "string" ? entry[1].value : undefined;
+        if (key && dark && light) {
+          (out as Record<string, unknown>)[key] = { dark, light };
+        }
       }
     }
   }
@@ -103,12 +113,17 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
   const toggleMap: Record<string, keyof VerticalTimelineListSettings> = {
     "dot-collapsible": "dotCollapsible",
   };
-  for (const piece of Object.values(raw.timelineCSSToggles ?? {})) {
-    if (!Array.isArray(piece)) continue;
-    for (const entry of piece) {
-      const key = toggleMap[entry?.id];
-      if (key && typeof entry.enabled === "boolean") {
-        (out as any)[key] = entry.enabled;
+  const toggles = raw.timelineCSSToggles;
+  if (isRecord(toggles)) {
+    for (const piece of Object.values(toggles)) {
+      if (!Array.isArray(piece)) continue;
+      for (const entry of piece) {
+        if (!isRecord(entry)) continue;
+        const id = typeof entry.id === "string" ? entry.id : undefined;
+        const key = id ? toggleMap[id] : undefined;
+        if (key && typeof entry.enabled === "boolean") {
+          (out as Record<string, unknown>)[key] = entry.enabled;
+        }
       }
     }
   }
@@ -117,5 +132,13 @@ function migrate_0_to_1(raw: any): Partial<VerticalTimelineListSettings> & { sch
 }
 
 //#endregion
+
+//#endregion
+
+//#region Utilities
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
 //#endregion

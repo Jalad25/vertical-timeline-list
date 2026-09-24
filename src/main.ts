@@ -149,6 +149,23 @@ function mutateTimelineElements(root: ParentNode): void {
     parent.querySelectorAll(":scope > ul.has-list-bullet li ul.has-list-bullet span.list-collapse-indicator.collapse-indicator.collapse-icon").forEach((span) => {
       span.addClass("vertical-timeline-list-collapse-disabled");
     });
+
+		// Override dot child (details) CSS style, if indicated
+    parent.querySelectorAll(":scope > ul.has-list-bullet li ul.has-list-bullet li").forEach((li) => {
+			// Look for first code element
+			const styleOverrides = li.querySelector("code");
+			if (styleOverrides !== null) {
+
+				if (styleOverrides.textContent !== null) {
+					const regex = /^STYLE\[([^\]]{3,})\]$/i;
+					const match = styleOverrides.textContent.trim().match(regex);
+
+					if (!match) return;
+					li.setAttribute("style", match[1]);
+					styleOverrides.remove();
+				}
+			}
+    });
   });
 }
 
