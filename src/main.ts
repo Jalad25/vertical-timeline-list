@@ -155,13 +155,15 @@ function mutateTimelineElements(root: ParentNode): void {
 			// Look for first code element
 			const styleOverrides = li.querySelector("code");
 			if (styleOverrides !== null) {
-				const regex = /^STYLE\[([^\]]{3,})\]$/i;
-				const match = styleOverrides.textContent.trim().match(regex);
 
-				if (!match) return;
+				if (styleOverrides.textContent !== null) {
+					const regex = /^STYLE\[([^\]]{3,})\]$/i;
+					const match = styleOverrides.textContent.trim().match(regex);
 
-				li.setAttribute("style", match[1]);
-				styleOverrides.remove();
+					if (!match) return;
+					li.setAttribute("style", match[1]);
+					styleOverrides.remove();
+				}
 			}
     });
   });
