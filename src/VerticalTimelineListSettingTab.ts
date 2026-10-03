@@ -6,6 +6,12 @@ import {
 import VerticalTimelineListPlugin, { ColorPair, VerticalTimelineListSettings } from "./main";
 import { applyCssVariables } from "./CssApplier";
 
+//#region Constants
+
+const OBSIDIAN_VERSION_DECLARATIVE_SETTINGS = "1.13.0";
+
+//#endregion
+
 //#region Types
 
 type NumberKey  = { [K in keyof VerticalTimelineListSettings]: VerticalTimelineListSettings[K] extends number ? K : never }[keyof VerticalTimelineListSettings];
@@ -22,6 +28,9 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
   constructor(app: App, plugin: VerticalTimelineListPlugin) {
     super(app, plugin);
     this.plugin = plugin;
+
+    // Icon for menu
+    this.icon = "timeline";
   }
 
   display(): void {
