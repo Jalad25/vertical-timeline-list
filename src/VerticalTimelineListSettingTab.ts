@@ -1,16 +1,12 @@
 import {
   App,
+	Notice,
   PluginSettingTab,
   Setting,
+	requireApiVersion
 } from "obsidian";
-import VerticalTimelineListPlugin, { ColorPair, VerticalTimelineListSettings } from "./main";
+import VerticalTimelineListPlugin, { ColorPair, VerticalTimelineListSettings, DATA_JSON_SCHEMA_VERSION } from "./main";
 import { applyCssVariables } from "./CssApplier";
-
-//#region Constants
-
-const OBSIDIAN_VERSION_DECLARATIVE_SETTINGS = "1.13.0";
-
-//#endregion
 
 //#region Types
 
@@ -33,14 +29,38 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     this.icon = "timeline";
   }
 
+  refresh(): void {
+    if (requireApiVersion("1.13.0")) this.update(); // Declarative settings
+    else if (this.containerEl.isShown()) this.display(); // Legacy settings
+  }
+
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createDiv({
-      attr: { style: "text-align:right;" },
-      text: `Version: ${this.plugin.manifest.version}`,
-    });
+    // Obsidian version < 1.13.0 styling
+    this.containerEl.addClass("vertical-timeline-list-legacy-settings-tab");
+
+    // Plugin and data schema version row
+    const pluginVersion = `Version ${this.plugin.manifest.version}`;
+    const dataJsonSchemaVersion = `Data schema version: ${DATA_JSON_SCHEMA_VERSION}`;
+    new Setting(containerEl)
+      .setName(pluginVersion)
+      .then((s: Setting) => {
+        s.descEl.createSpan({ text: dataJsonSchemaVersion });
+        s.descEl.createEl("br");
+        s.descEl.createEl("a", { text: "Visit GitHub repository", href: "https://github.com/Jalad25/vertical-timeline-list" });
+      })
+      .addButton((b) => {
+        b.setCta()
+         .setButtonText("Copy details for bug report")
+          .onClick(async () => {
+            const data = await this.plugin.loadData();
+            const report = `${pluginVersion}\n${dataJsonSchemaVersion}\n\ndata.json:\n${JSON.stringify(data, null, 2)}`;
+            await navigator.clipboard.writeText(report);
+            new Notice("Copied bug report details");
+          });
+      });
 
     // Dimensions
     new Setting(containerEl)

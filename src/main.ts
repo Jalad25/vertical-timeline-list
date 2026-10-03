@@ -1,6 +1,6 @@
 import { Plugin } from "obsidian";
 import { applyCssVariables } from "./CssApplier";
-import { CURRENT_SCHEMA_VERSION, migrate } from "./SchemaMigrations";
+import { migrate } from "./SchemaMigrations";
 import { VerticalTimelineListSettingTab } from "./VerticalTimelineListSettingTab";
 
 //#region Types
@@ -35,8 +35,10 @@ export interface VerticalTimelineListSettings {
 
 //#region Constants
 
+export const DATA_JSON_SCHEMA_VERSION = 1; // For data.json schema
+
 export const DEFAULT_SETTINGS: VerticalTimelineListSettings = {
-  schemaVersion: CURRENT_SCHEMA_VERSION,
+  schemaVersion: DATA_JSON_SCHEMA_VERSION,
 
   dotSeparation: 10,
   linePadding: 12,

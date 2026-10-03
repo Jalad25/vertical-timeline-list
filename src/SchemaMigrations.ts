@@ -1,8 +1,6 @@
-import { VerticalTimelineListSettings } from "./main";
+import { DATA_JSON_SCHEMA_VERSION, VerticalTimelineListSettings } from "./main";
 
 //#region Constants
-
-export const CURRENT_SCHEMA_VERSION = 1;
 
 const MIGRATIONS: Migration[] = [
   { from: 0, to: 1, apply: migrate_0_to_1 }
@@ -29,14 +27,14 @@ export type MigrationResult = {
 
 export function migrate(raw: unknown): MigrationResult {
   if (!isRecord(raw)) {
-    return { values: { schemaVersion: CURRENT_SCHEMA_VERSION }, migrated: true };
+    return { values: { schemaVersion: DATA_JSON_SCHEMA_VERSION }, migrated: true };
   }
 
   let current: Record<string, unknown> = raw;
   let version: number = typeof current.schemaVersion === "number" ? current.schemaVersion : 0;
 
   let migrated = false;
-  while (version < CURRENT_SCHEMA_VERSION) {
+  while (version < DATA_JSON_SCHEMA_VERSION) {
     const step = MIGRATIONS.find((m) => m.from === version);
     if (!step) break;
     current = step.apply(current);
