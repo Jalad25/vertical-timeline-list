@@ -1,5 +1,6 @@
 import {
   App,
+	apiVersion,
 	Notice,
   PluginSettingTab,
   Setting,
@@ -15,6 +16,17 @@ import { applyCssVariables } from "./CssApplier";
 type NumberKey  = { [K in keyof VerticalTimelineListCssSettings]: VerticalTimelineListCssSettings[K] extends number ? K : never }[keyof VerticalTimelineListCssSettings];
 type BooleanKey = { [K in keyof VerticalTimelineListCssSettings]: VerticalTimelineListCssSettings[K] extends boolean ? K : never }[keyof VerticalTimelineListCssSettings];
 type ColorKey   = { [K in keyof VerticalTimelineListCssSettings]: VerticalTimelineListCssSettings[K] extends ColorThemePair ? K : never }[keyof VerticalTimelineListCssSettings];
+
+interface BugReport {
+	pluginVersion: string;
+	obsidianVersion: string;
+	colorScheme: Theme;
+	dataSchemaVersion: number;
+	activeTheme: string;
+	installedThemes: string[];
+	enabledPlugins: string[];
+	data: unknown;
+}
 
 //#endregion
 
@@ -86,9 +98,8 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
         b.setCta()
          .setButtonText("Copy details for bug report")
           .onClick(async () => {
-            const data: unknown = await this.plugin.loadData();
-            const report = `${pluginVersion}\n${dataJsonSchemaVersion}\n\ndata.json:\n${JSON.stringify(data, null, 2)}`;
-            await navigator.clipboard.writeText(report);
+            const report = await this.buildBugReport();
+            await navigator.clipboard.writeText(this.formatBugReport(report));
             new Notice("Copied bug report details");
           });
       });
@@ -222,8 +233,8 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
 						b.setCta()
 							.setButtonText("Copy details for bug report")
 							.onClick(async () => {
-								const report = `${pluginVersion}\n${dataJsonSchemaVersion}\n\ndata.json:\n${JSON.stringify(this.plugin.configuration, null, 2)}`;
-								await navigator.clipboard.writeText(report);
+								const report = await this.buildBugReport();
+								await navigator.clipboard.writeText(this.formatBugReport(report));
 								new Notice("Copied bug report details");
 							});
 					});
@@ -292,6 +303,48 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
   private encodeColorKey(key: ColorKey, theme: Theme): string {
     return `${key}:${theme}`;
   }
+
+	// Collect data for a bug report
+	private async buildBugReport(): Promise<BugReport> {
+		// Tap into a properties not in the Obsidian public API to get list of themes, active theme, and enabled plugins
+		const internals = this.app as App & {
+			plugins?: { enabledPlugins?: Set<string> };
+			customCss?: { theme?: string, themes?: Record<string, unknown> };
+		};
+
+		return {
+			pluginVersion: this.plugin.manifest.version,
+			obsidianVersion: apiVersion,
+			colorScheme: activeDocument.querySelector(".theme-light") ? Theme.light : Theme.dark,
+			dataSchemaVersion: DATA_JSON_SCHEMA_VERSION,
+			activeTheme: internals.customCss?.theme ?? "",
+			installedThemes: Object.keys(internals.customCss?.themes ?? {}).sort(),
+			enabledPlugins: [...(internals.plugins?.enabledPlugins ?? [])].sort(),
+			data: await this.plugin.loadData()
+		};
+	}
+
+	// Format a bug report as plain text for the clipboard
+	private formatBugReport(r: BugReport): string {
+		const lines: string[] = [];
+		lines.push(`Plugin version: ${r.pluginVersion}`);
+		lines.push(`Obsidian version: ${r.obsidianVersion}`);
+		lines.push(`Color scheme: ${r.colorScheme}`);
+		lines.push(`Data schema version: ${r.dataSchemaVersion}`);
+		lines.push("");
+		lines.push(`Active theme: ${r.activeTheme || "(default)"}`);
+		lines.push("Installed themes:");
+		if (r.installedThemes.length === 0) lines.push("  (none)");
+		else for (const t of r.installedThemes) lines.push(`  - ${t}`);
+		lines.push("");
+		lines.push("Enabled plugins:");
+		if (r.enabledPlugins.length === 0) lines.push("  (none)");
+		else for (const p of r.enabledPlugins) lines.push(`  - ${p}`);
+		lines.push("");
+		lines.push("data.json:");
+		lines.push(JSON.stringify(r.data, null, 2));
+		return lines.join("\n");
+	}
 
 	//#endregion
 

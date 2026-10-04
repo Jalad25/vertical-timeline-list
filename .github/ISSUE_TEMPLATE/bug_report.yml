@@ -8,6 +8,8 @@ body:
       value: |
         Thanks for taking the time to file a bug report. Please fill out the sections below so the issue can be reproduced and triaged quickly.
 
+        **Before you copy the plugin details for a bug report,** make sure your vault is set up exactly the way it is when the bug occurs: same active theme, same community plugins enabled, same color scheme. The "Copy details for bug report" button captures that state, so it needs to match the broken state to be useful.
+
   - type: checkboxes
     id: prerequisites
     attributes:
@@ -66,19 +68,12 @@ body:
     validations:
       required: false
 
-  - type: input
-    id: plugin-version
+  - type: textarea
+    id: plugin-details
     attributes:
-      label: Plugin version
-      placeholder: e.g. 1.0.3
-    validations:
-      required: true
-
-  - type: input
-    id: obsidian-version
-    attributes:
-      label: Obsidian version
-      placeholder: e.g. 1.7.4
+      label: Plugin details
+      description: With your vault configured as it is when the bug occurs, open the plugin's settings tab, click "Copy details for bug report", and paste the result here. This captures plugin version, Obsidian version, color scheme, active theme, installed themes, enabled community plugins, and a dump of your `data.json` containing the plugin's settings.
+      render: text
     validations:
       required: true
 
@@ -97,10 +92,10 @@ body:
       required: true
 
   - type: dropdown
-    id: theme-mode
+    id: color-scheme
     attributes:
-      label: Theme mode
-      description: Which Obsidian appearance mode does the bug occur in? If you haven't checked the other mode, please try to reproduce there as well, some issues are theme-specific.
+      label: Color Scheme
+      description: Which color scheme does the bug occur in? If you haven't checked the other color scheme, please try to reproduce there as well, some issues are theme-specific.
       options:
         - Both light and dark mode
         - Light mode only
@@ -108,14 +103,6 @@ body:
         - Not applicable / not visual
     validations:
       required: true
-
-  - type: textarea
-    id: other-plugins
-    attributes:
-      label: Other plugins enabled
-      description: Does the bug still occur with all other community plugins disabled? List any plugins that seem related.
-    validations:
-      required: false
 
   - type: textarea
     id: screenshots
