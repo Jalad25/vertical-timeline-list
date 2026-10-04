@@ -1,8 +1,6 @@
-import { VerticalTimelineListSettings } from "./main";
+import { DATA_JSON_SCHEMA_VERSION, VerticalTimelineListConfiguration } from "./configuration";
 
 //#region Constants
-
-export const CURRENT_SCHEMA_VERSION = 1;
 
 const MIGRATIONS: Migration[] = [
   { from: 0, to: 1, apply: migrate_0_to_1 }
@@ -15,11 +13,11 @@ const MIGRATIONS: Migration[] = [
 type Migration = {
   from: number;
   to: number;
-  apply: (raw: Record<string, unknown>) => Partial<VerticalTimelineListSettings> & { schemaVersion: number };
+  apply: (raw: Record<string, unknown>) => Partial<VerticalTimelineListConfiguration> & { schemaVersion: number };
 };
 
 export type MigrationResult = {
-  values: Partial<VerticalTimelineListSettings>;
+  values: Partial<VerticalTimelineListConfiguration>;
   migrated: boolean;
 };
 
@@ -29,14 +27,14 @@ export type MigrationResult = {
 
 export function migrate(raw: unknown): MigrationResult {
   if (!isRecord(raw)) {
-    return { values: { schemaVersion: CURRENT_SCHEMA_VERSION }, migrated: true };
+    return { values: { schemaVersion: DATA_JSON_SCHEMA_VERSION }, migrated: true };
   }
 
   let current: Record<string, unknown> = raw;
   let version: number = typeof current.schemaVersion === "number" ? current.schemaVersion : 0;
 
   let migrated = false;
-  while (version < CURRENT_SCHEMA_VERSION) {
+  while (version < DATA_JSON_SCHEMA_VERSION) {
     const step = MIGRATIONS.find((m) => m.from === version);
     if (!step) break;
     current = step.apply(current);
@@ -55,12 +53,12 @@ export function migrate(raw: unknown): MigrationResult {
 /* This is a per-version migration steps. Append new functions below for each schema
    change and add it to MIGRATIONS. Never edit existing steps. */
 
-function migrate_0_to_1(raw: Record<string, unknown>): Partial<VerticalTimelineListSettings> & { schemaVersion: 1 } {
-  const out: Partial<VerticalTimelineListSettings> & { schemaVersion: 1 } = {
-    schemaVersion: 1,
+function migrate_0_to_1(raw: Record<string, unknown>): Partial<VerticalTimelineListConfiguration> & { schemaVersion: 1 } {
+  const out: Partial<VerticalTimelineListConfiguration> & { schemaVersion: 1 } = {
+    schemaVersion: 1
   };
 
-  const dimMap: Record<string, keyof VerticalTimelineListSettings> = {
+  const dimMap: Record<string, keyof VerticalTimelineListConfiguration> = {
     "dot-separation": "dotSeparation",
     "line-padding": "linePadding",
     "dotChildren-padding": "dotChildrenPadding",
@@ -85,7 +83,7 @@ function migrate_0_to_1(raw: Record<string, unknown>): Partial<VerticalTimelineL
   }
 
   // v0 Theme enum: 0 = dark, 1 = light
-  const colorMap: Record<string, keyof VerticalTimelineListSettings> = {
+  const colorMap: Record<string, keyof VerticalTimelineListConfiguration> = {
     "dot-color": "dotColor",
     "dot-collapsible-color": "dotCollapsibleColor",
     "dot-collapsible-shadow-color": "dotCollapsibleShadowColor",
@@ -110,7 +108,7 @@ function migrate_0_to_1(raw: Record<string, unknown>): Partial<VerticalTimelineL
     }
   }
 
-  const toggleMap: Record<string, keyof VerticalTimelineListSettings> = {
+  const toggleMap: Record<string, keyof VerticalTimelineListConfiguration> = {
     "dot-collapsible": "dotCollapsible",
   };
   const toggles = raw.timelineCSSToggles;

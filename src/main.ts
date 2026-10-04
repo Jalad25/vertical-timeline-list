@@ -1,70 +1,21 @@
 import { Plugin } from "obsidian";
 import { applyCssVariables } from "./CssApplier";
-import { CURRENT_SCHEMA_VERSION, migrate } from "./SchemaMigrations";
+import { migrate } from "./SchemaMigrations";
 import { VerticalTimelineListSettingTab } from "./VerticalTimelineListSettingTab";
-
-//#region Types
-
-export interface ColorPair {
-  dark: string;
-  light: string;
-}
-
-export interface VerticalTimelineListSettings {
-  schemaVersion: number;
-
-  // Dimensions
-  dotSeparation: number;
-  linePadding: number;
-  dotChildrenPadding: number;
-  dotChildrenTopMargin: number;
-  dotChildrenBottomMargin: number;
-
-  // Theme
-  dotColor: ColorPair;
-  dotCollapsibleColor: ColorPair;
-  dotCollapsibleShadowColor: ColorPair;
-  lineColor: ColorPair;
-  dotChildrenBackgroundColor: ColorPair;
-
-  // Behavior
-  dotCollapsible: boolean;
-}
-
-//#endregion
-
-//#region Constants
-
-export const DEFAULT_SETTINGS: VerticalTimelineListSettings = {
-  schemaVersion: CURRENT_SCHEMA_VERSION,
-
-  dotSeparation: 10,
-  linePadding: 12,
-  dotChildrenPadding: 10,
-  dotChildrenTopMargin: 10,
-  dotChildrenBottomMargin: 10,
-
-  dotColor: { dark: "#888888", light: "#888888" },
-  dotCollapsibleColor: { dark: "#8A5CF5", light: "#8A5CF5" },
-  dotCollapsibleShadowColor: { dark: "#8A5CF5", light: "#8A5CF5" },
-  lineColor: { dark: "#ffffff", light: "#000000" },
-  dotChildrenBackgroundColor: { dark: "#00000067", light: "#8f8f8f67" },
-
-  dotCollapsible: false,
-};
-
-//#endregion
+import { VerticalTimelineListConfiguration, DEFAULT_CONFIGURATION } from "./configuration";
 
 export default class VerticalTimelineListPlugin extends Plugin {
-  settings!: VerticalTimelineListSettings;
+  configuration!: VerticalTimelineListConfiguration;
 
   async onload() {
-    await this.loadSettings();
-    applyCssVariables(this.manifest.id, this.settings);
+    await this.loadConfiguration();
+    this.app.workspace.onLayoutReady(() => { // Wait for DOM to load to get bodies
+      applyCssVariables(this.app, this.manifest.id, this.configuration);
+    });
 
     this.registerEvent(
       this.app.workspace.on("css-change", () => {
-        applyCssVariables(this.manifest.id, this.settings);
+        applyCssVariables(this.app, this.manifest.id, this.configuration);
       })
     );
 
@@ -104,16 +55,23 @@ export default class VerticalTimelineListPlugin extends Plugin {
     this.addSettingTab(new VerticalTimelineListSettingTab(this.app, this));
   }
 
-  async loadSettings() {
+	//#region Configuration
+
+  async loadConfiguration() {
     const raw: unknown = await this.loadData();
+
+		// Migrate schema, if needed
     const { values, migrated } = migrate(raw);
-    this.settings = Object.assign({}, DEFAULT_SETTINGS, values);
-    if (migrated) await this.saveSettings();
+
+    this.configuration = Object.assign({}, DEFAULT_CONFIGURATION, values);
+    if (migrated) await this.saveConfiguration();
   }
 
-  async saveSettings() {
-    await this.saveData(this.settings);
+  async saveConfiguration() {
+    await this.saveData(this.configuration);
   }
+
+	//#endregion
 }
 
 //#region Utilitis

@@ -1,12 +1,7 @@
-import type { ColorPair, VerticalTimelineListSettings } from "./main";
+import { App } from "obsidian";
+import { ColorThemePair, Theme, VerticalTimelineListCssSettings } from "./configuration";
 
 //#region Types/Objects/Interfaces
-
-export const Theme = {
-  dark:  "dark",
-  light: "light",
-} as const;
-export type Theme = (typeof Theme)[keyof typeof Theme];
 
 export const ColorSpace = {
   RGB:  "RGB",
@@ -21,14 +16,18 @@ export type ColorSpace = (typeof ColorSpace)[keyof typeof ColorSpace];
 
 //#region CSS application
 
-export function applyCssVariables(prefix: string, s: VerticalTimelineListSettings): void {
+export function applyCssVariables(app: App, prefix: string, s: VerticalTimelineListCssSettings): void {
+  const docs = collectWorkspaceDocuments(app);
   const set = (name: string, value: string) => {
-    activeDocument.body.setCssProps({ [`--${prefix}-${name}`]: value });
+		// Add changes to all doc bodies to ensure it is applied everywhere in the vault including popout windows
+    for (const doc of docs) {
+      doc.body.setCssProps({ [`--${prefix}-${name}`]: value });
+    }
   };
   const px = (n: number) => `${n}px`;
-  const themed = (c: ColorPair) =>
+  const themed = (c: ColorThemePair) =>
     currentColorScheme() === Theme.light ? c.light : c.dark;
-  const color = (c: ColorPair, space: ColorSpace) =>
+  const color = (c: ColorThemePair, space: ColorSpace) =>
     returnColorSpaceValueFromHex(themed(c), space);
 
   // Set dimensions
@@ -58,6 +57,15 @@ export function applyCssVariables(prefix: string, s: VerticalTimelineListSetting
 //#endregion
 
 //#region Utilities
+
+function collectWorkspaceDocuments(app: App): Document[] {
+  const docs = new Set<Document>(); //Set for the dedupe
+  app.workspace.iterateAllLeaves((leaf) => {
+    docs.add(leaf.getContainer().doc);
+  });
+
+  return [...docs];
+}
 
 function currentColorScheme(): Theme {
   return activeDocument.querySelector(".theme-light") ? Theme.light : Theme.dark;

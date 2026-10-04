@@ -18,6 +18,8 @@ Before opening a new bug report:
 - Try to reproduce the bug in **both light and dark mode**, since some issues are theme-specific.
 - Try to reproduce the bug in the **Obsidian desktop application and the Obsidian mobile app**, since some issues are device-specific.
 
+When filing the report, open the plugin's settings tab and click **Copy details for bug report** with your vault in the state the bug occurs in (same active theme and community plugins enabled). Paste the result into the **Plugin details** field on the issue form. It captures the plugin version, Obsidian version, color scheme, active theme, installed themes, enabled plugins, and your `data.json` containing the plugin's settings.
+
 ## Suggesting Enhancements
 
 Feature requests are tracked as GitHub issues using the [feature request template](https://github.com/Jalad25/vertical-timeline-list/issues/new?template=feature_request.yml). The template focuses on the *problem* you're trying to solve before the proposed solution.

@@ -96,61 +96,71 @@ li.vertical-timeline-list {
 
 /* #endregion */
 
-/* #region Settings */
+/* #region Settings Tab */
 
-.vertical-timeline-list-setting-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0.75em 0;
-
-  th, td {
-    border: none;
-    padding: 0.5em 0.75em;
-    vertical-align: middle;
-  }
-
-  thead th {
-    text-align: left;
-    font-weight: 600;
-    color: var(--text-muted);
-    font-size: var(--font-ui-smaller);
-    border-bottom: 1px solid var(--background-modifier-border);
-  }
-
-  tbody tr + tr td {
-    border-top: 1px solid var(--background-modifier-border);
-  }
-
-  .vertical-timeline-list-setting-table-label {
-    width: 100%;
-  }
-
-  .vertical-timeline-list-setting-table-name {
-    color: var(--text-normal);
-    font-size: var(--font-ui-medium);
-  }
-
-  .vertical-timeline-list-setting-table-desc {
-    color: var(--text-muted);
-    font-size: var(--font-ui-smaller);
-    margin-top: 0.15em;
-  }
-
-  .vertical-timeline-list-setting-table-swatch {
-    width: 1px;
-    text-align: center;
-    white-space: nowrap;
-
-    input[type="color"] {
-      width: 32px;
-      height: 32px;
-      border: 1px solid var(--background-modifier-border);
-      border-radius: 4px;
-      padding: 0;
-      cursor: pointer;
-      background: transparent;
-    }
+/* Menu override */
+body:not(.is-phone) .vertical-tab-nav-item[data-setting-id="vertical-timeline-list"] {
+  .vertical-tab-nav-item-icon {
+    display: flex;
   }
 }
+
+/* #region Color Table */
+.vertical-timeline-list-setting-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0.75em 0;
+
+	th, td {
+		border: none;
+		padding: 0.5em 0.75em;
+		vertical-align: middle;
+	}
+
+	thead th {
+		text-align: left;
+		font-weight: 600;
+		color: var(--text-muted);
+		font-size: var(--font-ui-smaller);
+		border-bottom: 1px solid var(--background-modifier-border);
+	}
+
+	tbody tr + tr td {
+		border-top: 1px solid var(--background-modifier-border);
+	}
+
+	.vertical-timeline-list-setting-table-label {
+		width: 100%;
+	}
+
+	.vertical-timeline-list-setting-table-name {
+		color: var(--text-normal);
+		font-size: var(--font-ui-medium);
+	}
+
+	.vertical-timeline-list-setting-table-desc {
+		color: var(--text-muted);
+		font-size: var(--font-ui-smaller);
+		margin-top: 0.15em;
+	}
+
+	.vertical-timeline-list-setting-table-swatch {
+		width: 1px;
+		text-align: center;
+		white-space: nowrap;
+
+		input[type="color"] {
+			width: 32px;
+			height: 32px;
+			border: 1px solid var(--background-modifier-border);
+			border-radius: 4px;
+			padding: 0;
+			cursor: pointer;
+			background: transparent;
+		}
+	}
+}
+
+/* #endregion */
 
 /* #endregion */
