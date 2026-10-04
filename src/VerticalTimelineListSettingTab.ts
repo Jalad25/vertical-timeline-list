@@ -5,14 +5,15 @@ import {
   Setting,
 	requireApiVersion
 } from "obsidian";
-import VerticalTimelineListPlugin, { ColorPair, VerticalTimelineListSettings, DATA_JSON_SCHEMA_VERSION } from "./main";
+import { VerticalTimelineListCssSettings, ColorThemePair, DATA_JSON_SCHEMA_VERSION } from "./configuration";
+import VerticalTimelineListPlugin from "./main";
 import { applyCssVariables } from "./CssApplier";
 
 //#region Types
 
-type NumberKey  = { [K in keyof VerticalTimelineListSettings]: VerticalTimelineListSettings[K] extends number ? K : never }[keyof VerticalTimelineListSettings];
-type BooleanKey = { [K in keyof VerticalTimelineListSettings]: VerticalTimelineListSettings[K] extends boolean ? K : never }[keyof VerticalTimelineListSettings];
-type ColorKey   = { [K in keyof VerticalTimelineListSettings]: VerticalTimelineListSettings[K] extends ColorPair ? K : never }[keyof VerticalTimelineListSettings];
+type NumberKey  = { [K in keyof VerticalTimelineListCssSettings]: VerticalTimelineListCssSettings[K] extends number ? K : never }[keyof VerticalTimelineListCssSettings];
+type BooleanKey = { [K in keyof VerticalTimelineListCssSettings]: VerticalTimelineListCssSettings[K] extends boolean ? K : never }[keyof VerticalTimelineListCssSettings];
+type ColorKey   = { [K in keyof VerticalTimelineListCssSettings]: VerticalTimelineListCssSettings[K] extends ColorThemePair ? K : never }[keyof VerticalTimelineListCssSettings];
 
 //#endregion
 
@@ -33,6 +34,10 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     if (requireApiVersion("1.13.0")) this.update(); // Declarative settings
     else if (this.containerEl.isShown()) this.display(); // Legacy settings
   }
+
+	//#region Legacy Settings
+
+  //#region Obsidian Binding Hooks
 
   display(): void {
     const { containerEl } = this;
@@ -98,18 +103,20 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     this.toggleSetting(containerEl, "Dot collapsible", "Dots with details can be collapsed", "dotCollapsible");
   }
 
+	//#endregion
+
   private dimensionSetting(el: HTMLElement, name: string, desc: string, key: NumberKey): void {
     new Setting(el)
       .setName(name)
       .setDesc(desc)
       .addText((t) =>
-        t.setValue(String(this.plugin.settings[key]))
+        t.setValue(String(this.plugin.configuration[key]))
           .onChange(async (value) => {
             const n = parseInt(value, 10);
             if (Number.isNaN(n)) return;
-            this.plugin.settings[key] = n;
-            await this.plugin.saveSettings();
-            applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
+            this.plugin.configuration[key] = n;
+            await this.plugin.saveConfiguration();
+            applyCssVariables(this.plugin.manifest.id, this.plugin.configuration);
           })
       );
   }
@@ -119,11 +126,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setName(name)
       .setDesc(desc)
       .addToggle((t) =>
-        t.setValue(this.plugin.settings[key])
+        t.setValue(this.plugin.configuration[key])
           .onChange(async (value) => {
-            this.plugin.settings[key] = value;
-            await this.plugin.saveSettings();
-            applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
+            this.plugin.configuration[key] = value;
+            await this.plugin.saveConfiguration();
+            applyCssVariables(this.plugin.manifest.id, this.plugin.configuration);
           })
       );
   }
@@ -159,14 +166,16 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
 
   private renderColorCell(td: HTMLElement, key: ColorKey, theme: "light" | "dark"): void {
     const input = td.createEl("input", { type: "color" });
-    input.value = this.plugin.settings[key][theme];
+    input.value = this.plugin.configuration[key][theme];
     input.addEventListener("input", () => {
-      this.plugin.settings[key][theme] = input.value;
-      void this.plugin.saveSettings().then(() => {
-        applyCssVariables(this.plugin.manifest.id, this.plugin.settings);
+      this.plugin.configuration[key][theme] = input.value;
+      void this.plugin.saveConfiguration().then(() => {
+        applyCssVariables(this.plugin.manifest.id, this.plugin.configuration);
       });
     });
   }
+
+	//#endregion
 }
 
 //#endregion

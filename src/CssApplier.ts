@@ -1,4 +1,4 @@
-import type { ColorPair, VerticalTimelineListSettings } from "./main";
+import { ColorThemePair, VerticalTimelineListCssSettings } from "./configuration";
 
 //#region Types/Objects/Interfaces
 
@@ -21,14 +21,14 @@ export type ColorSpace = (typeof ColorSpace)[keyof typeof ColorSpace];
 
 //#region CSS application
 
-export function applyCssVariables(prefix: string, s: VerticalTimelineListSettings): void {
+export function applyCssVariables(prefix: string, s: VerticalTimelineListCssSettings): void {
   const set = (name: string, value: string) => {
     activeDocument.body.setCssProps({ [`--${prefix}-${name}`]: value });
   };
   const px = (n: number) => `${n}px`;
-  const themed = (c: ColorPair) =>
+  const themed = (c: ColorThemePair) =>
     currentColorScheme() === Theme.light ? c.light : c.dark;
-  const color = (c: ColorPair, space: ColorSpace) =>
+  const color = (c: ColorThemePair, space: ColorSpace) =>
     returnColorSpaceValueFromHex(themed(c), space);
 
   // Set dimensions
