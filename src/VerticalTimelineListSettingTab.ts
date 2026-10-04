@@ -4,7 +4,6 @@ import {
 	Notice,
   PluginSettingTab,
   Setting,
-	requireApiVersion,
 	SettingDefinitionItem
 } from "obsidian";
 import { VerticalTimelineListCssSettings, ColorThemePair, Theme, DATA_JSON_SCHEMA_VERSION } from "./configuration";
