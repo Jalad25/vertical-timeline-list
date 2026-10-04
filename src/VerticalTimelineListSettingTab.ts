@@ -88,6 +88,8 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
         s.descEl.createSpan({ text: dataJsonSchemaVersion });
         s.descEl.createEl("br");
         s.descEl.createEl("a", { text: "Visit GitHub repository", href: "https://github.com/Jalad25/vertical-timeline-list" });
+        s.descEl.createEl("br");
+				s.descEl.createEl("a", { text: "Report a bug", href: "https://github.com/Jalad25/vertical-timeline-list/issues/new?template=bug_report.yml" });
       })
       .addButton((b) => {
         b.setCta()
@@ -223,6 +225,8 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
 						s.descEl.createSpan({ text: dataJsonSchemaVersion });
 						s.descEl.createEl("br");
 						s.descEl.createEl("a", { text: "Visit GitHub repository", href: "https://github.com/Jalad25/vertical-timeline-list" });
+						s.descEl.createEl("br");
+						s.descEl.createEl("a", { text: "Report a bug", href: "https://github.com/Jalad25/vertical-timeline-list/issues/new?template=bug_report.yml" });
 					})
 					.addButton((b) => {
 						b.setCta()
