@@ -43,11 +43,6 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     this.icon = "timeline";
   }
 
-  refresh(): void {
-    if (requireApiVersion("1.13.0")) this.update(); // Declarative settings
-    else if (this.containerEl.isShown()) this.display(); // Legacy settings
-  }
-
 	//#region Shared Obsidian Binding Hooks
 
   // Override getting value of control for key
