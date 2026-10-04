@@ -85,7 +85,7 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
         b.setCta()
          .setButtonText("Copy details for bug report")
           .onClick(async () => {
-            const data = await this.plugin.loadData();
+            const data: unknown = await this.plugin.loadData();
             const report = `${pluginVersion}\n${dataJsonSchemaVersion}\n\ndata.json:\n${JSON.stringify(data, null, 2)}`;
             await navigator.clipboard.writeText(report);
             new Notice("Copied bug report details");
@@ -135,7 +135,7 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setName(name)
       .setDesc(desc)
       .addText((t) =>
-        t.setValue(String(this.getControlValue(key) as number))
+        t.setValue(String(this.getControlValue(key)))
           .onChange(async (value) => {
             const n = parseInt(value, 10);
             if (Number.isNaN(n)) return;
