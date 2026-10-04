@@ -5,7 +5,7 @@ import {
   Setting,
 	requireApiVersion
 } from "obsidian";
-import { VerticalTimelineListCssSettings, ColorThemePair, DATA_JSON_SCHEMA_VERSION } from "./configuration";
+import { VerticalTimelineListCssSettings, ColorThemePair, Theme, DATA_JSON_SCHEMA_VERSION } from "./configuration";
 import VerticalTimelineListPlugin from "./main";
 import { applyCssVariables } from "./CssApplier";
 
@@ -35,10 +35,35 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     else if (this.containerEl.isShown()) this.display(); // Legacy settings
   }
 
+	//#region Shared Obsidian Binding Hooks
+
+  // Override getting value of control for key
+  getControlValue(key: string): unknown {
+    const [id, theme] = this.decodeKey(key);
+    const value = this.plugin.configuration[id];
+    if (theme) return (value as ColorThemePair)[theme];
+    return value;
+  }
+
+	// Override persistance of control value for key
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    const [id, theme] = this.decodeKey(key);
+    if (theme) {
+      (this.plugin.configuration[id] as ColorThemePair)[theme] = value as string;
+    } else {
+      (this.plugin.configuration[id] as unknown) = value;
+    }
+    await this.plugin.saveConfiguration();
+    applyCssVariables(this.app, this.plugin.manifest.id, this.plugin.configuration);
+  }
+
+  //#endregion
+
 	//#region Legacy Settings
 
   //#region Obsidian Binding Hooks
 
+	// Legacy settings
   display(): void {
     const { containerEl } = this;
     containerEl.empty();
@@ -46,7 +71,7 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     // Obsidian version < 1.13.0 styling
     this.containerEl.addClass("vertical-timeline-list-legacy-settings-tab");
 
-    // Plugin and data schema version row
+    // Plugin and data schema version row w/ bug reporting copy
     const pluginVersion = `Version ${this.plugin.manifest.version}`;
     const dataJsonSchemaVersion = `Data schema version: ${DATA_JSON_SCHEMA_VERSION}`;
     new Setting(containerEl)
@@ -110,13 +135,11 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setName(name)
       .setDesc(desc)
       .addText((t) =>
-        t.setValue(String(this.plugin.configuration[key]))
+        t.setValue(String(this.getControlValue(key) as number))
           .onChange(async (value) => {
             const n = parseInt(value, 10);
             if (Number.isNaN(n)) return;
-            this.plugin.configuration[key] = n;
-            await this.plugin.saveConfiguration();
-            applyCssVariables(this.plugin.manifest.id, this.plugin.configuration);
+            await this.setControlValue(key, n);
           })
       );
   }
@@ -126,12 +149,8 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       .setName(name)
       .setDesc(desc)
       .addToggle((t) =>
-        t.setValue(this.plugin.configuration[key])
-          .onChange(async (value) => {
-            this.plugin.configuration[key] = value;
-            await this.plugin.saveConfiguration();
-            applyCssVariables(this.plugin.manifest.id, this.plugin.configuration);
-          })
+        t.setValue(this.getControlValue(key) as boolean)
+          .onChange((value) => this.setControlValue(key, value))
       );
   }
 
@@ -165,17 +184,33 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
   }
 
   private renderColorCell(td: HTMLElement, key: ColorKey, theme: "light" | "dark"): void {
+    const encodedKey = this.encodeColorKey(key, theme); // This is only done so it can work with the get/setControlValue hooks
     const input = td.createEl("input", { type: "color" });
-    input.value = this.plugin.configuration[key][theme];
+    input.value = this.getControlValue(encodedKey) as string;
     input.addEventListener("input", () => {
-      this.plugin.configuration[key][theme] = input.value;
-      void this.plugin.saveConfiguration().then(() => {
-        applyCssVariables(this.plugin.manifest.id, this.plugin.configuration);
-      });
+      void this.setControlValue(encodedKey, input.value);
     });
   }
 
 	//#endregion
+
+	//#region Utilities
+
+  private decodeKey(key: string): [keyof VerticalTimelineListCssSettings, Theme | null] {
+    const colonIdx = key.indexOf(":");
+    if (colonIdx < 0) return [key as keyof VerticalTimelineListCssSettings, null];
+    const sub = key.slice(colonIdx + 1);
+    if (sub !== "light" && sub !== "dark") return [key as keyof VerticalTimelineListCssSettings, null];
+    return [key.slice(0, colonIdx) as keyof VerticalTimelineListCssSettings, sub];
+  }
+
+	// Colors are the only ones that need this encoding due to the color settings being saved as an object (with light and dark values)
+  private encodeColorKey(key: ColorKey, theme: Theme): string {
+    return `${key}:${theme}`;
+  }
+
+	//#endregion
+
 }
 
 //#endregion

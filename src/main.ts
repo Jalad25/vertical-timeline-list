@@ -9,11 +9,13 @@ export default class VerticalTimelineListPlugin extends Plugin {
 
   async onload() {
     await this.loadConfiguration();
-    applyCssVariables(this.manifest.id, this.configuration);
+    this.app.workspace.onLayoutReady(() => { // Wait for DOM to load to get bodies
+      applyCssVariables(this.app, this.manifest.id, this.configuration);
+    });
 
     this.registerEvent(
       this.app.workspace.on("css-change", () => {
-        applyCssVariables(this.manifest.id, this.configuration);
+        applyCssVariables(this.app, this.manifest.id, this.configuration);
       })
     );
 

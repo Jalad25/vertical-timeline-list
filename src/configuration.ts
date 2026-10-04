@@ -2,6 +2,12 @@
 
 //#region Types/Objects/Interfaces
 
+export const Theme = {
+  dark:  "dark",
+  light: "light",
+} as const;
+export type Theme = (typeof Theme)[keyof typeof Theme];
+
 export interface ColorThemePair {
   dark: string;
   light: string;
