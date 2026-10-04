@@ -3,7 +3,8 @@ import {
 	Notice,
   PluginSettingTab,
   Setting,
-	requireApiVersion
+	requireApiVersion,
+	SettingDefinitionItem
 } from "obsidian";
 import { VerticalTimelineListCssSettings, ColorThemePair, Theme, DATA_JSON_SCHEMA_VERSION } from "./configuration";
 import VerticalTimelineListPlugin from "./main";
@@ -69,7 +70,7 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     containerEl.empty();
 
     // Obsidian version < 1.13.0 styling
-    this.containerEl.addClass("vertical-timeline-list-legacy-settings-tab");
+    this.containerEl.addClass(`${this.plugin.manifest.id}-legacy-settings-tab`);
 
     // Plugin and data schema version row w/ bug reporting copy
     const pluginVersion = `Version ${this.plugin.manifest.version}`;
@@ -94,20 +95,17 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
 
     // Dimensions
     new Setting(containerEl)
-      .setClass(`${this.plugin.manifest.id}-setting-section-header`)
       .setName("Spacing")
-      .setDesc("All units in px")
       .setHeading();
 
-    this.dimensionSetting(containerEl, "Dot separation", "Gap between dots on line", "dotSeparation");
-    this.dimensionSetting(containerEl, "Line padding", "Line left and right padding", "linePadding");
-    this.dimensionSetting(containerEl, "Dot details padding", "Details top, bottom, left, and right padding", "dotChildrenPadding");
-    this.dimensionSetting(containerEl, "Dot details top separation", "", "dotChildrenTopMargin");
-    this.dimensionSetting(containerEl, "Dot details bottom separation", "", "dotChildrenBottomMargin");
+    this.renderDimensionSetting(containerEl, "Dot separation (px)", "Gap between dots on line", "dotSeparation");
+    this.renderDimensionSetting(containerEl, "Line padding (px)", "Line left and right padding", "linePadding");
+    this.renderDimensionSetting(containerEl, "Dot details padding (px)", "Details top, bottom, left, and right padding", "dotChildrenPadding");
+    this.renderDimensionSetting(containerEl, "Dot details top separation (px)", "", "dotChildrenTopMargin");
+    this.renderDimensionSetting(containerEl, "Dot details bottom separation (px)", "", "dotChildrenBottomMargin");
 
     // Theme
     new Setting(containerEl)
-      .setClass(`${this.plugin.manifest.id}-setting-section-header`)
       .setName("Theme colors")
       .setHeading();
 
@@ -116,21 +114,21 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       { key: "dotCollapsibleColor", name: "Dot collapsible color", desc: "Dots with details" },
       { key: "dotCollapsibleShadowColor", name: "Dot collapsible hover color", desc: "Only visible when collapsible option is on" },
       { key: "lineColor", name: "Line color", desc: "" },
-      { key: "dotChildrenBackgroundColor", name: "Dot details background color", desc: "" },
+      { key: "dotChildrenBackgroundColor", name: "Dot details background color", desc: "" }
     ]);
 
     // Behavior
     new Setting(containerEl)
-      .setClass(`${this.plugin.manifest.id}-setting-section-header`)
       .setName("Behavior")
       .setHeading();
 
-    this.toggleSetting(containerEl, "Dot collapsible", "Dots with details can be collapsed", "dotCollapsible");
+    this.renderToggleSetting(containerEl, "Dot collapsible", "Dots with details can be collapsed", "dotCollapsible");
   }
 
 	//#endregion
 
-  private dimensionSetting(el: HTMLElement, name: string, desc: string, key: NumberKey): void {
+	// Render dimension setting
+  private renderDimensionSetting(el: HTMLElement, name: string, desc: string, key: NumberKey): void {
     new Setting(el)
       .setName(name)
       .setDesc(desc)
@@ -144,7 +142,8 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       );
   }
 
-  private toggleSetting(el: HTMLElement, name: string, desc: string, key: BooleanKey): void {
+	// Render toggle setting
+  private renderToggleSetting(el: HTMLElement, name: string, desc: string, key: BooleanKey): void {
     new Setting(el)
       .setName(name)
       .setDesc(desc)
@@ -154,12 +153,13 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       );
   }
 
+	// Render color table w/ color settings
   private renderColorTable(
     containerEl: HTMLElement,
     rows: { key: ColorKey; name: string; desc: string }[],
   ): void {
     const table = containerEl.createEl("table", {
-      cls: `${this.plugin.manifest.id}-setting-table`,
+      cls: `${this.plugin.manifest.id}-setting-table`
     });
 
     const thead = table.createEl("thead");
@@ -183,6 +183,7 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
     }
   }
 
+	// Render color setting
   private renderColorCell(td: HTMLElement, key: ColorKey, theme: "light" | "dark"): void {
     const encodedKey = this.encodeColorKey(key, theme); // This is only done so it can work with the get/setControlValue hooks
     const input = td.createEl("input", { type: "color" });
@@ -191,6 +192,89 @@ export class VerticalTimelineListSettingTab extends PluginSettingTab {
       void this.setControlValue(encodedKey, input.value);
     });
   }
+
+	//#endregion
+
+	//#region Declarative Settings
+
+	//#region Obsidian Binding Hooks
+
+  // Declarative settings
+	getSettingDefinitions(): SettingDefinitionItem[] {
+    const items: SettingDefinitionItem[] = [];
+
+    // Obsidian version >= 1.13.0 styling
+    this.containerEl.addClass(`${this.plugin.manifest.id}-declarative-settings-tab`);
+
+    // Plugin and data schema version row w/ bug reporting copy
+		const pluginVersion = `Version ${this.plugin.manifest.version}`;
+		const dataJsonSchemaVersion = `Data schema version: ${DATA_JSON_SCHEMA_VERSION}`;
+		items.push({
+			name: " ",
+			render: (setting) => {
+				setting.setName(pluginVersion)
+					.then((s: Setting) => {
+						s.descEl.createSpan({ text: dataJsonSchemaVersion });
+						s.descEl.createEl("br");
+						s.descEl.createEl("a", { text: "Visit GitHub repository", href: "https://github.com/Jalad25/vertical-timeline-list" });
+					})
+					.addButton((b) => {
+						b.setCta()
+							.setButtonText("Copy details for bug report")
+							.onClick(async () => {
+								const report = `${pluginVersion}\n${dataJsonSchemaVersion}\n\ndata.json:\n${JSON.stringify(this.plugin.configuration, null, 2)}`;
+								await navigator.clipboard.writeText(report);
+								new Notice("Copied bug report details");
+							});
+					});
+			}
+		});
+
+    // Dimensions
+    items.push({
+      type: "group",
+      heading: "Spacing",
+      items: [
+        { name: "Dot separation (px)", desc: "Gap between dots on line", control: { type: "number", key: "dotSeparation" } },
+        { name: "Line padding (px)", desc: "Line left and right padding", control: { type: "number", key: "linePadding" } },
+        { name: "Dot details padding (px)", desc: "Details top, bottom, left, and right padding", control: { type: "number", key: "dotChildrenPadding" } },
+        { name: "Dot details top separation (px)", control: { type: "number", key: "dotChildrenTopMargin" } },
+        { name: "Dot details bottom separation (px)", control: { type: "number", key: "dotChildrenBottomMargin" } }
+      ]
+    });
+
+    // Theme colors
+    items.push({
+      type: "group",
+      heading: "Theme colors",
+      items: [{
+        name: " ",
+        render: (setting) => {
+          setting.settingEl.empty();
+          this.renderColorTable(setting.settingEl, [
+            { key: "dotColor", name: "Dot color", desc: "Dots without details" },
+            { key: "dotCollapsibleColor", name: "Dot collapsible color", desc: "Dots with details" },
+            { key: "dotCollapsibleShadowColor", name: "Dot collapsible hover color", desc: "Only visible when collapsible option is on" },
+            { key: "lineColor", name: "Line color", desc: "" },
+            { key: "dotChildrenBackgroundColor", name: "Dot details background color", desc: "" }
+          ]);
+        }
+      }]
+    });
+
+    // Behavior
+    items.push({
+      type: "group",
+      heading: "Behavior",
+      items: [
+        { name: "Dot collapsible", desc: "Dots with details can be collapsed", control: { type: "toggle", key: "dotCollapsible" } }
+      ]
+    });
+
+    return items;
+  }
+
+  //#endregion
 
 	//#endregion
 
